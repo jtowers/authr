@@ -244,7 +244,7 @@ describe('default adapter', function () {
 
       it('should be able to check the expiration date on an a verification hash', function (done) {
         adapter.findVerificationToken(saved_user.email.email_verification_hash, function (err, user) {
-          isExpired = adapter.emailVerificationExpired(adapter.user);
+          isExpired = adapter.emailVerificationExpired(saved_user);
 
           isExpired.should.equal(false);
           done();
@@ -252,13 +252,12 @@ describe('default adapter', function () {
       });
 
       it('should be able to mark email_verified as true', function (done) {
-        adapter.findVerificationToken(saved_user.email.email_verification_hash, function (err, user) {
-          adapter.verifyEmailAddress(function (err, user) {
-            should.exist(user);
-            user.email.email_verified.should.equal(true);
-            done();
-          });
+        
+        adapter.verifyEmailAddress(saved_user, function(err, user){
+          should.exist(user);
+          done();
         });
+
 
       });
       it('should return false if the account is not locked', function (done) {
