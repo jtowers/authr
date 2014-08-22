@@ -43,66 +43,58 @@ var _generateToken = function(config, email, callback){
 };
 
 
-var _verifyToken = function (config, token, callback) {
-  async.series([
-    function (next) {
-      if(token) {
-        next();
+var _verifyToken = function(config, token, callback){
+  async.waterfall([
+    function(next){
+      if(token){
+        next(null, token);
       } else {
-        next('Missing or malformed token.');
+        next(config.errmsg.token_not_found);
       }
     },
-    function (next) {
-      config.Adapter.findResetToken(token, function (err, user) {
-        next(err);
+    function(token, next){
+      config.Adapter.findResetToken(token, function(err, user){
+        next(err, user);
       });
     },
-    function (next) {
-      var isExpired = config.Adapter.resetTokenExpired();
-      if(isExpired) {
-        next(config.errmsg.token_expired);
+    function(user, next){
+      var isExpired = config.Adapter.resetTokenExpired(user);
+      if(isExpired){
+        next(config.errmsg.token_expired, user);
       } else {
-        next();
+        next(null, user);
       }
     }
-  ], function (err, result) {
-    if(err) {
-      callback(err);
-    } else {
-      callback(null, config.Adapter.user);
-    }
+  ], function(err, user){
+    callback(err, user);
   });
 };
 
-var _resetPassword = function(config, username, password, callback){
-  async.series([
+
+var _resetPassword = function(config, login, callback){
+  async.waterfall([
     function(next){
-     
-      if(!username || !password){
-        next(config.errmsg.un_and_pw_required);
-      } else {
-        next();
-      }
+      config.Adapter.checkCredentials(login, function(err, login){
+        next(err, login);
+      });
     },
-    function(next){
-      config.Adapter.getUserByUsername(username, function(err, user){
+    function(login, next){
+      config.Adapter.isValueTaken(login, config.user.username, function(err, user){
         next(err, user);
       });
     },
-    function(next){
-      config.Adapter.hash_new_password(password, function(err, hash){
-        next(err, hash);
-      });
-    },
-    function(next){
-     
-      config.Adapter.resetPassword(function(err, user){
+    function(user, next){
+      config.Adapter.hashPassword(login, user, config.user.password, function(err, user){
         next(err, user);
       });
-    }
-  ], function(err, result){
-   
-    callback(err, config.Adapter.user);
+    },
+   function(user, next){
+     config.Adapter.resetPassword(user, function(err, user){
+      next(err, user);
+    });
+   }
+  ], function(err, user){
+    callback(err, user);
   });
 };
 

@@ -123,8 +123,8 @@ Authr.prototype.verifyPasswordResetToken = function (token, callback) {
  * @param {String} password - password to update to
  * @return {Callback} callback - return a callback after the token is verified
  */
-Authr.prototype.updatePassword = function (username, password, callback) {
-  Reset.resetPassword(this.config, username, password, function (err, user) {
+Authr.prototype.updatePassword = function (login, callback) {
+  Reset.resetPassword(this.config,login ,function (err, user) {
     if(callback) {
       return callback(err, user);
     }

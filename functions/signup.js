@@ -43,7 +43,7 @@ var Signup = function(config, signup, callback){
      
       if(config.security.hash_password){
 
-        config.Adapter.hashPassword(signup, config.user.password, function(err, signup){
+        config.Adapter.hashPassword(signup,signup, config.user.password, function(err, signup){
         next(err, signup);
       });
       } else{

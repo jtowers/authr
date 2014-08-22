@@ -92,13 +92,12 @@ describe('password reset module', function () {
       authr.createPasswordResetToken(user.email_address, function (err, _token) {
         if(err) throw err;
         token = _token;
-
         done();
       });
     });
 
     it('should verify a correct token', function (done) {
-      authr.verifyPasswordResetToken(token, function (err, user) {
+      authr.verifyPasswordResetToken(token.password_reset_token, function (err, user) {
         should.not.exist(err);
         done();
       });
@@ -110,18 +109,18 @@ describe('password reset module', function () {
     beforeEach(function(done){
       authr.createPasswordResetToken(user.email_address, function(err, token){
         if(err) throw err;
-        authr.verifyPasswordResetToken(token, function(err, user){
+        authr.verifyPasswordResetToken(token.password_reset_token, function(err, user){
           if(err) throw err;
           done();
         });
       });
     });
-    
+
     it('should reset passwords', function(done){
-      authr.updatePassword(user.username, 'new_password', function(err, _user){
+      authr.updatePassword({username:'test@test.com', password:'test2'}, function(err, _user){
         should.not.exist(err);
-        should.exist(_user.password);
-        _user.password.should.not.equal(user.password);
+        should.exist(_user);
+        _user.should.equal(1);
         done();
       });
     });

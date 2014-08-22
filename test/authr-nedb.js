@@ -153,7 +153,7 @@ describe('default adapter', function () {
       });
 
       it('should be able to hash a password', function (done) {
-        adapter.hashPassword(signup_config, adapter.config.user.password, function (err, user) {
+        adapter.hashPassword(signup_config,signup_config,adapter.config.user.password, function (err, user) {
           should.not.exist(err);
           should.exist(user);
           done();
@@ -213,7 +213,7 @@ describe('default adapter', function () {
             throw err;
           }
           adapter.buildAccountSecurity(user);
-          adapter.hashPassword(user, adapter.config.user.password, function () {
+          adapter.hashPassword(user,user, adapter.config.user.password, function () {
             adapter.saveUser(user, function (err, user) {
               saved_user = user;
               done();
@@ -373,20 +373,14 @@ describe('default adapter', function () {
         });
       });
 
-      it('should be able to hash a new password on password update', function (done) {
-        adapter.getUserByUsername('test@test.com', function (err, user) {
-          adapter.hash_new_password('new_password', function (err, user) {
-            should.not.exist(err);
-            done();
-          });
-        });
 
-      });
       it('should be able to save a new password on password update', function (done) {
-        adapter.getUserByUsername('test@test.com', function (err, user) {
-          adapter.hash_new_password('new_password', function (err, user) {
-            adapter.resetPassword(function (err, user) {
+        var login = {account:{username:'test@test.com', password:'test'}};
+        adapter.isValueTaken(login,'account.username', function (err, user) {
+          adapter.hashPassword(login,user,'account.password', function (err, user) {
+            adapter.resetPassword(user,function (err, usr) {
               should.not.exist(err);
+              usr.should.equal(1);
               done();
             });
 
