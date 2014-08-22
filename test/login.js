@@ -46,7 +46,11 @@ describe('login module', function () {
     });
 
   });
-
+  afterEach(function(done){
+    authr.config.Adapter.resetCollection(function(err){
+      done();
+    });
+  });
   it('should require a username to log in', function (done) {
 
     var bad_credentials = {
@@ -76,12 +80,6 @@ describe('login module', function () {
 
   });
 
-  afterEach(function(done){
-    authr.config.Adapter.resetCollection(function(err){
-      done();
-    });
-  });
-
   it('should return the user if the credentials are correct, the account is unlocked, and the email address is verified', function (done) {
     var good_credentials = {
       username: "test@test.com",
@@ -106,7 +104,6 @@ describe('login module', function () {
     authr.login(good_credentials, function(err, user){
       should.exist(err);
       err.err.should.equal(authr.config.errmsg.email_address_not_verified);
-      user.should.equal(authr.config.Adapter.user);
       done();
     });
   });

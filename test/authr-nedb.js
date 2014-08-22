@@ -230,7 +230,7 @@ describe('default adapter', function () {
       });
       it('should be able to find duplicate users', function (done) {
         adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, isTaken) {
-          isTaken.should.equal(true);
+          isTaken.account.username.should.equal(saved_user.account.username);
           done();
         });
       });
@@ -261,8 +261,8 @@ describe('default adapter', function () {
 
       });
       it('should return false if the account is not locked', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function (isTaken) {
-          adapter.isAccountLocked(function (err, locked) {
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+          adapter.isAccountLocked(usr,function (err, locked) {
             should.not.exist(err);
             locked.should.equal(false);
             done();
@@ -271,8 +271,8 @@ describe('default adapter', function () {
       });
 
       it('should be able to lock an account', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function (isTaken) {
-          adapter.lockUserAccount(function (err) {
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+          adapter.lockUserAccount(usr, function (err) {
             should.exist(err);
             err.err.should.equal(adapter.config.errmsg.account_locked.replace('##i##', adapter.config.security.lock_account_for_minutes));
             done();
@@ -281,9 +281,9 @@ describe('default adapter', function () {
       });
 
       it('should be able to unlock an account', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function (isTaken) {
-          adapter.lockUserAccount(function (err) {
-            adapter.unlockUserAccount(function () {
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+          adapter.lockUserAccount(usr, function (err) {
+            adapter.unlockUserAccount(usr, function () {
               adapter.user.account.locked.account_locked.should.equal(false);
               done();
             });
@@ -293,38 +293,39 @@ describe('default adapter', function () {
       });
 
       it('should expire failed login attempts', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function (isTaken) {
-          adapter.user = adapter.buildQuery(adapter.user, adapter.config.user.account_failed_attempts, 4);
-          adapter.user = adapter.buildQuery(adapter.user, adapter.config.user.account_last_failed_attempt, moment().add(-1, 'hour').toDate());
-          adapter.failedAttemptsExpired(function (err, reset) {
-            adapter.user.account.locked.account_failed_attempts.should.equal(0);
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+          usr = adapter.buildQuery(usr, adapter.config.user.account_failed_attempts, 4);
+          usr = adapter.buildQuery(usr, adapter.config.user.account_last_failed_attempt, moment().add(-1, 'hour').toDate());
+          adapter.failedAttemptsExpired(usr, function (err, reset) {
+            usr.account.locked.account_failed_attempts.should.equal(0);
             done();
           });
         });
       });
 
       it('should increment the number of failed attempts after a failed attempt', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function (isTaken) {
-          adapter.incrementFailedLogins(function () {
-            adapter.user.account.locked.account_failed_attempts.should.equal(1);
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+          adapter.incrementFailedLogins(usr, function () {
+            usr.account.locked.account_failed_attempts.should.equal(1);
             done();
           });
         });
       });
 
       it('should lock an account after the specified number of failed login attempts', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function (isTaken) {
-          adapter.user = adapter.buildQuery(adapter.user, adapter.config.user.account_failed_attempts, adapter.config.security.max_failed_login_attempts);
-          adapter.incrementFailedLogins(function () {
-            adapter.user.account.locked.account_locked.should.equal(true);
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+         usr = adapter.buildQuery(usr, adapter.config.user.account_failed_attempts, adapter.config.security.max_failed_login_attempts);
+          adapter.incrementFailedLogins(usr, function () {
+            usr.account.locked.account_locked.should.equal(true);
             done();
           });
         });
       });
 
       it('should increment the number of failed attempts when a bad password is supplied', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function () {
-          adapter.comparePassword('not_really_it', function (err, doc) {
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+          login = {account:{username: 'test@test.com', password:'not_really_it'}};
+          adapter.comparePassword(usr, login, function (err, doc) {
             should.exist(err);
             err.remaining_attempts.should.equal(9);
             done();
@@ -333,8 +334,9 @@ describe('default adapter', function () {
       });
 
       it('should return null when the password is correct', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function () {
-          adapter.comparePassword('test', function (err, doc) {
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+          login = {account:{username:'test@test.com', password:'test'}};
+          adapter.comparePassword(usr, login, function (err, doc) {
             should.not.exist(err);
             done();
           });
