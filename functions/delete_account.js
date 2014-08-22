@@ -28,7 +28,6 @@ var Delete = function (config, username, password, callback) {
     }
   ],
     function (err, result) {
-      console.log('async done');
       if(err){
         return callback(err, null);
       } else {

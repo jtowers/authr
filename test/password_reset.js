@@ -59,10 +59,11 @@ describe('password reset module', function () {
   });
 
   describe('token generation', function () {
-    it('should generate a new token when requested', function (done) {
-      authr.createPasswordResetToken(user.email_address, function (err, token) {
+    it('should generate a new token when requested and email address is correct', function (done) {
+      authr.createPasswordResetToken(user.email_address, function (err, user) {
         should.not.exist(err);
-        should.exist(token);
+        should.exist(user);
+        should.exist(user.password_reset_token);
         done();
       });
     });
@@ -78,7 +79,7 @@ describe('password reset module', function () {
       authr.createPasswordResetToken('not_real', function (err, token) {
         should.exist(err);
         should.not.exist(token);
-        err.should.equal(authr.config.errmsg.username_not_found);
+        err.should.equal(authr.config.errmsg.email_address_not_found);
         done();
       });
     });

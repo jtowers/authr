@@ -345,7 +345,8 @@ describe('default adapter', function () {
       it('should be able to save a password reset token', function (done) {
         adapter.getUserByUsername('test@test.com', function (err, user) {
           if(err) throw err;
-          adapter.savePWResetToken('dummytoken', function (err, user) {
+          adapter.savePWResetToken(user, 'dummytoken', function (err, user) {
+            should.exist(user.account.password_reset_token);
             done();
           });
         });
@@ -358,7 +359,7 @@ describe('default adapter', function () {
           adapter.generateToken(20, function (err, token) {
 
             should.not.exist(err);
-            adapter.savePWResetToken(token, function (err, user) {
+            adapter.savePWResetToken(user, token, function (err, user) {
 
               should.not.exist(err);
 

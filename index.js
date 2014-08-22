@@ -174,11 +174,12 @@ Authr.prototype.errormsg = function () {
       email_address_taken: 'This email address is already in use. Please try again.',
       token_not_found: 'This token does not exist. Please try again.',
       token_expired: 'This token has expired. A new one has been generated.',
-      un_and_pw_required: 'A username and password are required to log in.',
+      un_and_pw_required: 'Username and/or password are required',
       username_not_found: 'Your username and/or password is invalid. Please try again.',
       password_incorrect: 'Your username and/or password is invalid. Please try again.',
       account_locked: 'Too many failed attempts. This account will be locked for ##i## minutes.',
-      email_address_not_verified: 'Your email address is not verified. Please click the link in the verification email to activate your account.'
+      email_address_not_verified: 'Your email address is not verified. Please click the link in the verification email to activate your account.',
+      email_address_not_found: 'Could not find this email address. Please try again.'
     };
   } else {
     if(!this.config.errmsg.username_taken) {
@@ -209,6 +210,9 @@ Authr.prototype.errormsg = function () {
     }
     if(!this.config.errmsg.email_address_taken) {
       this.config.errmsg.email_address_taken = 'This email address is already in use. Please try again.';
+    }
+    if(!this.config.errmsg.email_address_not_found){
+      this.config.errmsg.email_address_not_found = 'Could not find this email address. Please try again.';
     }
   }
 
