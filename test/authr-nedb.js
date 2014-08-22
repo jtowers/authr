@@ -88,6 +88,8 @@ describe('default adapter', function () {
         user: {
           username: 'account.username',
           password: 'account.password',
+          password_reset_token: 'account.password_reset_token',
+          password_reset_token_expiration: 'account.password_reset_token_expiration',
           account_locked: 'account.locked.account_locked',
           account_locked_until: 'account.locked.account_locked_until',
           account_failed_attempts: 'account.locked.account_failed_attempts',
@@ -128,16 +130,7 @@ describe('default adapter', function () {
         }
       };
       adapter = new Adapter(authr_config);
-      adapter.signupConfig(signup_config);
       done();
-
-    });
-
-    describe('config', function () {
-      it('should have the right signup config', function (done) {
-        adapter.signup.should.equal(signup_config);
-        done();
-      });
 
     });
 
@@ -148,7 +141,7 @@ describe('default adapter', function () {
         done();
       });
 
-      it('should be able to dynamically build mongodb objects for queries using the user key in the authr config', function (done) {
+      it('should be able to dynamically build objects for queries using the user key in the authr config', function (done) {
         test_query = {};
         test_query = adapter.buildQuery(test_query, 'account.username', 'test');
         test_query = adapter.buildQuery(test_query, 'account.password', 'test');
@@ -158,19 +151,37 @@ describe('default adapter', function () {
         test_query.email.email_verified.should.equal(true);
         done();
       });
+
       it('should be able to hash a password', function (done) {
-        adapter.hash_password(function (err, hash) {
+        adapter.hashPassword(signup_config, adapter.config.user.password, function (err, user) {
           should.not.exist(err);
-          hash.should.equal(adapter.signup.account.password);
+          should.exist(user);
           done();
         });
       });
 
       it('should be able to generate a verification hash', function (done) {
-        adapter.doEmailVerification(adapter.signup, function (err) {
+        adapter.doEmailVerification(signup_config, function (err) {
           should.not.exist(err);
           done();
         });
+      });
+
+      it('should return no error when credentials are supplied', function (done) {
+        adapter.checkCredentials(signup_config, function (err, user) {
+          should.not.exist(err);
+          done();
+        });
+
+      });
+      it('should return no error when credentials are supplied', function (done) {
+        signup_config.account.username = null;
+        adapter.checkCredentials(signup_config, function (err, user) {
+          should.exist(err);
+          err.should.equal(adapter.config.errmsg.un_and_pw_required);
+          done();
+        });
+
       });
 
       it('should be able to save users', function (done) {
@@ -178,7 +189,7 @@ describe('default adapter', function () {
           if(err) {
             throw err;
           }
-          adapter.saveUser(function (err, user) {
+          adapter.saveUser(signup_config, function (err, user) {
             should.exist(user);
             adapter.disconnect(function () {
               done();
@@ -190,31 +201,26 @@ describe('default adapter', function () {
     describe('db operations', function () {
       var saved_user;
       beforeEach(function (done) {
-        user = {
+        var user = {
           account: {
             username: 'test@test.com',
             password: 'test'
           }
         };
-        adapter.connect(function (err) {
+
+        adapter.doEmailVerification(user, function (err, user) {
           if(err) {
             throw err;
-          } else {
-            adapter.doEmailVerification(adapter.signup, function (err) {
-              if(err) {
-                throw err;
-              }
-              adapter.buildAccountSecurity(adapter.signup);
-              adapter.hash_password(function () {
-                adapter.saveUser(function (err, user) {
-                  saved_user = user;
-                  done();
-                });
-              });
-            });
-
           }
+          adapter.buildAccountSecurity(user);
+          adapter.hashPassword(user, adapter.config.user.password, function () {
+            adapter.saveUser(user, function (err, user) {
+              saved_user = user;
+              done();
+            });
+          });
         });
+
       });
 
       afterEach(function (done) {
@@ -223,7 +229,7 @@ describe('default adapter', function () {
         });
       });
       it('should be able to find duplicate users', function (done) {
-        adapter.isValueTaken(adapter.signup, adapter.config.user.username, function (isTaken) {
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, isTaken) {
           isTaken.should.equal(true);
           done();
         });
@@ -326,6 +332,7 @@ describe('default adapter', function () {
           });
         });
       });
+
       it('should return null when the password is correct', function (done) {
         adapter.isValueTaken(adapter.signup, adapter.config.user.username, function () {
           adapter.comparePassword('test', function (err, doc) {
@@ -333,6 +340,70 @@ describe('default adapter', function () {
             done();
           });
         });
+      });
+      it('should be able to save a password reset token', function (done) {
+        adapter.getUserByUsername('test@test.com', function (err, user) {
+          if(err) throw err;
+          adapter.savePWResetToken('dummytoken', function (err, user) {
+            done();
+          });
+        });
+      });
+
+      it('should be able to find a password reset token', function (done) {
+        adapter.getUserByUsername('test@test.com', function (err, user) {
+
+          should.not.exist(err);
+          adapter.generateToken(20, function (err, token) {
+
+            should.not.exist(err);
+            adapter.savePWResetToken(token, function (err, user) {
+
+              should.not.exist(err);
+
+              adapter.findResetToken(user.account.password_reset_token, function (err, user) {
+                should.not.exist(err);
+                done();
+              });
+
+            });
+          });
+        });
+      });
+
+      it('should be able to hash a new password on password update', function (done) {
+        adapter.getUserByUsername('test@test.com', function (err, user) {
+          adapter.hash_new_password('new_password', function (err, user) {
+            should.not.exist(err);
+            done();
+          });
+        });
+
+      });
+      it('should be able to save a new password on password update', function (done) {
+        adapter.getUserByUsername('test@test.com', function (err, user) {
+          adapter.hash_new_password('new_password', function (err, user) {
+            adapter.resetPassword(function (err, user) {
+              should.not.exist(err);
+              done();
+            });
+
+          });
+        });
+
+      });
+      it('should be able to delete a user', function (done) {
+        adapter.getUserByUsername('test@test.com', function (err, user) {
+          adapter.deleteAccount('test@test.com', function (err, user) {
+            should.not.exist(err);
+            adapter.getUserByUsername(user.username, function (err, user) {
+              should.exist(err);
+              should.not.exist(user);
+              done();
+            });
+          });
+        });
+
       });
     });
   });

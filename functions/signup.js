@@ -1,6 +1,8 @@
 /** @module authr-signup */
 var async = require('async');
 
+
+
 /**
  * @function
  * @name Signup
@@ -9,71 +11,68 @@ var async = require('async');
  * @param {Callback} cb - callback to execute when signup finishes
  * @return {Callback}
  */
-var Signup = function (config, signup, cb) {
+var Signup = function(config, signup, callback){
   var self = this;
-  async.series([
+  async.waterfall([
     function(next){
-     config.Adapter.signupConfig(signup);
-      next();
-    },
-    function(next){
-      next(config.Adapter.checkCredentials());
-    },
-    function (next) {
-      config.Adapter.isValueTaken(config.Adapter.signup, config.user.username, function (isTaken) {
-          if(!isTaken) {
-            next(null, false);
-          } else {
-            next(config.errmsg.username_taken, true);
-          }
+      config.Adapter.checkCredentials(signup, function(err, signup){
+        next(err, signup);
       });
     },
-    function(next){
+    function(signup, next){
+      config.Adapter.isValueTaken(signup, config.user.username, function(err, isTaken){
+        if(isTaken){
+          next(config.errmsg.username_taken);
+        } else {
+          next(null, signup);
+        }
+      });
+    },
+    function(signup, next){
       if(config.user.username !== config.user.email_address){
-        config.Adapter.isValueTaken(config.Adapter.signup, config.user.email_address, function(isTaken){
-          if(!isTaken){
-            next(null, false);
-          } else {
+        config.Adapter.isValueTaken(signup, config.user.email_address, function(err, isTaken){
+          if(isTaken){
             next(config.errmsg.email_address_taken);
+          } else {
+            next(null, signup);
           }
         });
-      } else {
-        next();
       }
     },
-    function (next) {
-      if(config.security.hash_password) {
-        config.Adapter.hash_password(function (err, hash) {
-          next(err, hash);
-        });
-      } else {
-        next(null);
+    function(signup, next){
+      if(config.security.hashPassword){
+        config.Adapter.hashPassword(signup, config.user.password, function(err, signup){
+        next(err, signup);
+      });
+      } else{
+        next(null, signup);
       }
+      
     },
-    function(next){
+    function(signup, next){
       if(config.security.max_failed_login_attempts){
-        config.Adapter.buildAccountSecurity(config.Adapter.signup);
-        next(null);
+        config.Adapter.buildAccountSecurity(signup);
+        next(null, signup);
       }
     },
-     function (next) {
+    function (signup, next) {
       if(config.security.email_verification) {
-        config.Adapter.doEmailVerification(config.Adapter.signup,function (err, verification) {
-          next(err, verification);
+        config.Adapter.doEmailVerification(signup,function (err, signup) {
+          next(err, signup);
         });
       } else {
-        next(null);
+        next(null, signup);
       }
-    }
-  ], function (err, result) {
-    if(err) {
-      return cb(err);
-    } else {
-      config.Adapter.saveUser(function (err, user) {
-        return cb(err, user);
+    },
+    function(signup, next){
+      config.Adapter.saveUser(signup, function(err, user){
+        next(err, user);
       });
     }
+  ], function(err, user){
+    callback(err, user);
   });
 };
+
 
 module.exports = Signup;
