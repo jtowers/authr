@@ -1,0 +1,20 @@
+{
+// Configure your Run and Preview buttons here.
+
+// Run button configuration
+  "commands": {
+    "Tests": "npm test",
+    "Code Coverage": "npm test && mocha --require blanket -R html-cov > test/code_coverage.html",
+    "Docs":"./node_modules/.bin/jsdoc -d doc -t ./node_modules/ink-docstrap/template -c ./node_modules/ink-docstrap/template/jsdoc.conf.json README.md",
+        "Node version": "node --version"
+  },
+
+// Preview button configuration
+  "preview": {
+    "Ungit": "{{domain}}:8448/#/repository?path=%2Fhome%2Fcodio%2Fworkspace",
+        "Project Index (static)": "https://{{domain}}/{{index}}",
+        "Current File (static)": "https://{{domain}}/{{filepath}}",
+        "Box URL": "http://{{domain}}:3000/",
+        "Box URL SSL": "https://{{domain}}:9500/"
+  }
+}
