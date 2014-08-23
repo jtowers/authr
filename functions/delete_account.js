@@ -2,7 +2,12 @@
 
 var async = require('async');
 
-var Delete = function (config, login, callback) {
+/** Delete a user account
+ * @param {Object} config - authr configuration object
+ * @param {Object} login - credentials for the user being removed
+ * @param {DeleteCallback} callback - callback to run when finished
+*/
+ Delete = function (config, login, callback) {
   async.waterfall([
     function(next){
       config.Adapter.checkCredentials(login, function(err,login){
@@ -34,5 +39,12 @@ var Delete = function (config, login, callback) {
       callback(err,user);
     });
 };
+
+/**
+ * Handles the deleteUser response
+ * @callback DeleteCallback
+ * @param {String} err - error, if it exists
+ * @param {Object} user - user that was removed
+ */ 
 
 module.exports = Delete;

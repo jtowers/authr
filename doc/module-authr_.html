@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>authr-nedb Global</title>
+	<title>authr-nedb Module: authr</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -28,7 +28,7 @@
 					<ul class="dropdown-menu ">
 						
 						<li>
-							<a href="module-authr.html">authr</a>
+							<a href="module-authr_.html">authr</a>
 						</li>
 						
 						<li>
@@ -82,12 +82,12 @@
 					
 
 
-	<h1 class="page-title">Global</h1>
+	<h1 class="page-title">Module: authr</h1>
 <section>
 
 <header>
     <h2>
-    
+    authr
     </h2>
     
 </header>
@@ -122,6 +122,16 @@
 
 
 	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-1">line 1</a>
+			</li>
+		</ul>
+	</dd>
+	
 
 	
 
@@ -142,20 +152,25 @@
     
 
     
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Classes</h3>
 
         <dl>
-                
+            <dt><a href="module-authr-Authr.html">Authr</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
 <dt>
-    <h4 class="name" id="_generateTokenCallback"><span class="type-signature"></span>_generateTokenCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="createPasswordResetToken"><span class="type-signature">&lt;inner> </span>createPasswordResetToken<span class="signature">(email_address)</span><span class="type-signature"> &rarr; {Callback}</span></h4>
     
     
 </dt>
@@ -163,7 +178,7 @@
     
     
     <div class="description">
-        <p>Handles _generateToken response</p>
+        <p>Generates a password reset token for a user</p>
     </div>
     
 
@@ -197,7 +212,7 @@
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>email_address</code></td>
             
 
             <td class="type">
@@ -213,326 +228,7 @@
 
             
 
-            <td class="description last"><p>error message, if it exists</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>user that the token was generated for</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="reset_password.js.html">functions/reset_password.js</a>,
-				 <a href="reset_password.js.html#sunlight-1-line-44">line 44</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-            
-                
-<dt>
-    <h4 class="name" id="_verifyTokenCallback"><span class="type-signature"></span>_verifyTokenCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Handles _verifyToken response</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>err</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>error message, if it exists</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>user that the token was verified against</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="reset_password.js.html">functions/reset_password.js</a>,
-				 <a href="reset_password.js.html#sunlight-1-line-84">line 84</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-            
-                
-<dt>
-    <h4 class="name" id="createPasswordResetTokenCallback"><span class="type-signature"></span>createPasswordResetTokenCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Function to handle createPasswordResetToken response</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>err</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>error message, if it exists</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>user object, including the newly created token</p></td>
+            <td class="description last"><p>email address to generate a reset token for</p></td>
         </tr>
 
 	
@@ -569,7 +265,106 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-135">line 135</a>
+				 <a href="index.js.html#sunlight-1-line-90">line 90</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>callback - return a callback after the token is generated</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Callback</span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="db"><span class="type-signature">&lt;inner> </span>db<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Sets default database configuration - in-memory nedb. Does not set any mising options.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-152">line 152</a>
 			</li>
 		</ul>
 	</dd>
@@ -596,10 +391,10 @@
     
 </dd>
 
+        
             
-                
 <dt>
-    <h4 class="name" id="deleteAccountCallback"><span class="type-signature"></span>deleteAccountCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="deleteAccount"><span class="type-signature">&lt;inner> </span>deleteAccount<span class="signature">(username, password)</span><span class="type-signature"> &rarr; {Callback}</span></h4>
     
     
 </dt>
@@ -607,7 +402,7 @@
     
     
     <div class="description">
-        <p>Function to handle deleteAccount response</p>
+        <p>Delete account</p>
     </div>
     
 
@@ -641,7 +436,7 @@
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>username</code></td>
             
 
             <td class="type">
@@ -657,20 +452,20 @@
 
             
 
-            <td class="description last"><p>error message, if it exists</p></td>
+            <td class="description last"><p>username of user to delete</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>user</code></td>
+                <td class="name"><code>password</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">String</span>
 
 
             
@@ -680,7 +475,7 @@
 
             
 
-            <td class="description last"><p>user that was signed deleted</p></td>
+            <td class="description last"><p>account password</p></td>
         </tr>
 
 	
@@ -717,7 +512,106 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-219">line 219</a>
+				 <a href="index.js.html#sunlight-1-line-136">line 136</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>callback - return a callback after account is deleted</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Callback</span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="errormsgconfig"><span class="type-signature">&lt;inner> </span>errormsgconfig<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Sets default error message text</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-166">line 166</a>
 			</li>
 		</ul>
 	</dd>
@@ -744,10 +638,10 @@
     
 </dd>
 
+        
             
-                
 <dt>
-    <h4 class="name" id="loginCallback"><span class="type-signature"></span>loginCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getAdapter"><span class="type-signature">&lt;inner> </span>getAdapter<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -755,7 +649,159 @@
     
     
     <div class="description">
-        <p>Function to handle login response</p>
+        <p>Gets a new instance of the adapter depending on the db type specified in the config</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-349">line 349</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="security"><span class="type-signature">&lt;inner> </span>security<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Sets default security config. Checks for a missing config and sets all defaults or checks for missing options and sets defaults for any missing options.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-293">line 293</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="updatePassword"><span class="type-signature">&lt;inner> </span>updatePassword<span class="signature">(username, password)</span><span class="type-signature"> &rarr; {Callback}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Update password</p>
     </div>
     
 
@@ -789,7 +835,7 @@
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>username</code></td>
             
 
             <td class="type">
@@ -805,20 +851,20 @@
 
             
 
-            <td class="description last"><p>error message, if it exists</p></td>
+            <td class="description last"><p>username to update</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>user</code></td>
+                <td class="name"><code>password</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">String</span>
 
 
             
@@ -828,7 +874,7 @@
 
             
 
-            <td class="description last"><p>user that was logged in</p></td>
+            <td class="description last"><p>password to update to</p></td>
         </tr>
 
 	
@@ -865,7 +911,106 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-81">line 81</a>
+				 <a href="index.js.html#sunlight-1-line-120">line 120</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>callback - return a callback after the token is verified</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Callback</span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="userconfig"><span class="type-signature">&lt;inner> </span>userconfig<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Sets default user config if it is missing or checks for any missing options and sets defaults.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="index.js.html">index.js</a>,
+				 <a href="index.js.html#sunlight-1-line-223">line 223</a>
 			</li>
 		</ul>
 	</dd>
@@ -892,10 +1037,10 @@
     
 </dd>
 
+        
             
-                
 <dt>
-    <h4 class="name" id="signUpCallback"><span class="type-signature"></span>signUpCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="verifyEmail"><span class="type-signature">&lt;inner> </span>verifyEmail<span class="signature">(token, callback)</span><span class="type-signature"> &rarr; {Callback}</span></h4>
     
     
 </dt>
@@ -903,7 +1048,7 @@
     
     
     <div class="description">
-        <p>Function to handle signUp response</p>
+        <p>Verifies a user email address.</p>
     </div>
     
 
@@ -937,30 +1082,7 @@
 
         <tr>
             
-                <td class="name"><code>err</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>error message, if it exists</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
+                <td class="name"><code>token</code></td>
             
 
             <td class="type">
@@ -976,7 +1098,30 @@
 
             
 
-            <td class="description last"><p>user that was signed up</p></td>
+            <td class="description last"><p>token to verify</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Callback</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>execute callback when function finishes</p></td>
         </tr>
 
 	
@@ -1013,7 +1158,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-53">line 53</a>
+				 <a href="index.js.html#sunlight-1-line-74">line 74</a>
 			</li>
 		</ul>
 	</dd>
@@ -1036,14 +1181,33 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Callback</span>
+
+
+	</dd>
+</dl>
+
+
+        
     
     
 </dd>
 
+        
             
-                
 <dt>
-    <h4 class="name" id="updatePasswordCallback"><span class="type-signature"></span>updatePasswordCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="verifyPasswordResetToken"><span class="type-signature">&lt;inner> </span>verifyPasswordResetToken<span class="signature">(token)</span><span class="type-signature"> &rarr; {Callback}</span></h4>
     
     
 </dt>
@@ -1051,7 +1215,7 @@
     
     
     <div class="description">
-        <p>Function to handle updatePassword response</p>
+        <p>Verifies a password reset token</p>
     </div>
     
 
@@ -1085,7 +1249,7 @@
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>token</code></td>
             
 
             <td class="type">
@@ -1101,30 +1265,7 @@
 
             
 
-            <td class="description last"><p>error message, if it exists</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>user that was reset</p></td>
+            <td class="description last"><p>token to verify</p></td>
         </tr>
 
 	
@@ -1161,7 +1302,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-190">line 190</a>
+				 <a href="index.js.html#sunlight-1-line-105">line 105</a>
 			</li>
 		</ul>
 	</dd>
@@ -1184,307 +1325,36 @@
     
     
     
+    <h5>Returns:</h5>
     
-    
-</dd>
-
             
-                
-<dt>
-    <h4 class="name" id="verifyEmailCallback"><span class="type-signature"></span>verifyEmailCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Function to handle verifyEmail response</p>
-    </div>
-    
+<div class="param-desc">
+    <p>callback - return a callback after the token is verified</p>
+</div>
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Callback</span>
+
+
+	</dd>
+</dl>
+
+
         
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>err</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>error message, if it exists</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>user that was verified</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-108">line 108</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
     
     
 </dd>
 
-            
-                
-<dt>
-    <h4 class="name" id="verifyPasswordResetTokenCallback"><span class="type-signature"></span>verifyPasswordResetTokenCallback<span class="signature">(err, user)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Function to handle verifPasswordResetToken response</p>
-    </div>
+        </dl>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>err</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>error message, if it exists</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>user that the token was verified against</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="index.js.html">index.js</a>,
-				 <a href="index.js.html#sunlight-1-line-162">line 162</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-            </dl>
     
 
     
