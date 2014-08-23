@@ -46,11 +46,11 @@ describe('delete account module', function(){
   });
   afterEach(function (done) {
     authr.config.Adapter.resetCollection(function (err) {
-      authr.close();
+      authr = null;
       done();
     });
   });
-  
+
   it('should return an error if username and/or password are missing', function(done){
     authr.deleteAccount({username:'', password:''}, function(err, user){
       should.exist(err);

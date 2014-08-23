@@ -134,6 +134,12 @@ describe('default adapter', function () {
 
     });
 
+    afterEach(function(done){
+      adapter.resetCollection(function(){
+        done();
+      });
+    });
+
     describe('utilities', function () {
       it('should be able to get the value of an object using a string indicating its path', function (done) {
         var username = adapter.getVal(signup_config, 'account.username');

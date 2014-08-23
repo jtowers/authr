@@ -37,7 +37,7 @@ describe('signup module', function () {
   });
   afterEach(function (done) {
     authr.config.Adapter.resetCollection(function (err) {
-      authr.close();
+      authr = null;
       done();
     });
   });

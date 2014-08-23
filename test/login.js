@@ -48,6 +48,7 @@ describe('login module', function () {
   });
   afterEach(function(done){
     authr.config.Adapter.resetCollection(function(err){
+      authr = null;
       done();
     });
   });

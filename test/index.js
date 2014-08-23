@@ -2,6 +2,7 @@ var should = require('chai').should();
 var blanket = require('blanket');
 var Authr = require('../index.js');
 
+process.setMaxListeners(50);
 describe('core module', function(){
   
   describe('missing config', function() {
@@ -10,8 +11,10 @@ describe('core module', function(){
     authr = new Authr();
   });
     afterEach(function(done){
-      authr.close();
-      done();
+      authr.config.Adapter.resetCollection(function(){
+        authr = null;
+        done();
+      });
     });
 
   it('use default user config if none is supplied', function () {
@@ -75,8 +78,10 @@ describe('signup', function (done) {
   });
 
   afterEach(function(done){
-    authr.close();
-    done();
+    authr.config.Adapter.resetCollection(function(){
+      authr = null;
+      done();
+    });
   });
 
   it('should sign users up', function (done) {
