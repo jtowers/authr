@@ -52,7 +52,7 @@ describe('delete account module', function(){
   });
   
   it('should return an error if username and/or password are missing', function(done){
-    authr.deleteAccount('', '', function(err, user){
+    authr.deleteAccount({username:'', password:''}, function(err, user){
       should.exist(err);
       err.should.equal(authr.config.errmsg.un_and_pw_required);
       done();
@@ -60,7 +60,8 @@ describe('delete account module', function(){
   });
   
     it('should return an error if username is not found', function(done){
-    authr.deleteAccount('test', 'test', function(err, user){
+      var login = {username:'test', password:'test'};
+    authr.deleteAccount(login, function(err, user){
       should.exist(err);
       err.should.equal(authr.config.errmsg.username_not_found);
       done();
@@ -68,7 +69,8 @@ describe('delete account module', function(){
   });
   
       it('should return an error if password is incorrect', function(done){
-    authr.deleteAccount('test@test.com', 'test2', function(err, user){
+        var login = {username:'test@test.com', password:'test2'};
+    authr.deleteAccount(login, function(err, user){
       should.exist(err);
       err.err.should.equal(authr.config.errmsg.password_incorrect.replace('##i##', authr.config.security.max_failed_login_attempts-1));
       done();
@@ -76,7 +78,8 @@ describe('delete account module', function(){
   });
   
       it('should delete an account if username and password are correct', function(done){
-    authr.deleteAccount('test@test.com', 'test', function(err, usr){
+        var login = {username:'test@test.com', password:'test'};
+    authr.deleteAccount(login, function(err, usr){
       should.not.exist(err);
       should.exist(usr);
       done();

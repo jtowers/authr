@@ -2,37 +2,36 @@
 
 var async = require('async');
 
-var Delete = function (config, username, password, callback) {
-  async.series([
+var Delete = function (config, login, callback) {
+  async.waterfall([
     function(next){
-      if(!username || !password){
-        next(config.errmsg.un_and_pw_required);
-      } else {
-        next();
-      }
+      config.Adapter.checkCredentials(login, function(err,login){
+        next(err, login);
+      });
     },
-    function(next){
-      config.Adapter.getUserByUsername(username, function(err, user){
+    function(login, next){
+      config.Adapter.isValueTaken(login,config.user.username, function(err, user){
+        if(user){
+          next(err, user, login);
+        } else {
+          next(config.errmsg.password_incorrect);
+        }
+        
+      });
+    },
+    function(user,login, next){
+      config.Adapter.comparePassword(user,login, function(err, user){
         next(err, user);
       });
     },
-    function(next){
-      config.Adapter.comparePassword(password, function(err, user){
-        next(err, user);
-      });
-    },
-    function(next){
-    config.Adapter.deleteAccount(username, function(err, user){
-      callback(err, user);
+    function(user, next){
+    config.Adapter.deleteAccount(user, function(err, user){
+      next(err, user);
     });
     }
   ],
-    function (err, result) {
-      if(err){
-        return callback(err, null);
-      } else {
-        return callback(null, result[result.length-1]);
-      }
+    function (err, user) {
+      callback(err,user);
     });
 };
 

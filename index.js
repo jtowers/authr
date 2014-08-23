@@ -139,8 +139,8 @@ Authr.prototype.updatePassword = function (login, callback) {
  * @param {String} password - account password
  * @return {Callback} callback - return a callback after account is deleted
  */
-Authr.prototype.deleteAccount = function (username, password, callback) {
-  Delete(this.config, username, password, function (err, user) {
+Authr.prototype.deleteAccount = function (login, callback) {
+  Delete(this.config, login, function (err, user) {
     if(callback) {
       return callback(err, user);
     }

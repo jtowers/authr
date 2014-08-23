@@ -389,15 +389,10 @@ describe('default adapter', function () {
 
       });
       it('should be able to delete a user', function (done) {
-        adapter.getUserByUsername('test@test.com', function (err, user) {
-          adapter.deleteAccount('test@test.com', function (err, user) {
-            should.not.exist(err);
-            adapter.getUserByUsername(user.username, function (err, user) {
-              should.exist(err);
-              should.not.exist(user);
-              done();
-            });
-          });
+        adapter.deleteAccount(saved_user, function(err, user){
+          should.not.exist(err);
+          should.exist(user);
+          done();
         });
 
       });
