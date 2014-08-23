@@ -25,7 +25,7 @@ Verify = function(config, token, callback){
       }
     },
     function(user, next){
-      config.Adapter.verifyEmailAddress(user, function(err, user){
+      config.Adapter.verifyEmailAddress(user, function(err){
         next(err, user);
       });
     }

@@ -24,8 +24,13 @@ function Authr(config) {
 
   // create a new adapter
   this.getAdapter();
+  var self = this;
 
-  process.on('SIGINT', this.close);
+  process.on('SIGINT', function(){
+    self.config.Adapter.disconnect(function () {
+      process.exit(0);
+    });
+  });
 
 }
 
@@ -180,7 +185,7 @@ Authr.prototype.verifyPasswordResetToken = function (token, callback) {
  * });
  */
 Authr.prototype.updatePassword = function (login, callback) {
-  Reset.resetPassword(this.config,login ,function (err, user) {
+  Reset.resetPassword(this.config, login, function (err, user) {
     if(callback) {
       return callback(err, user);
     }
@@ -284,7 +289,7 @@ Authr.prototype.errormsg = function () {
     if(!this.config.errmsg.email_address_taken) {
       this.config.errmsg.email_address_taken = 'This email address is already in use. Please try again.';
     }
-    if(!this.config.errmsg.email_address_not_found){
+    if(!this.config.errmsg.email_address_not_found) {
       this.config.errmsg.email_address_not_found = 'Could not find this email address. Please try again.';
     }
   }
@@ -379,7 +384,7 @@ Authr.prototype.security = function () {
     if(!this.config.security.hash_password) {
       this.config.security.hash_password = true;
     }
-    if(!this.config.security.password_reset_token_expiration_hours){
+    if(!this.config.security.password_reset_token_expiration_hours) {
       this.config.security.password_reset_token_expiration_hours = 1;
     }
     if(!this.config.security.hash_salt_factor && this.config.security.hash_password === true) {
@@ -432,15 +437,5 @@ Authr.prototype.getAdapter = function () {
 
 };
 
-/**
- * Closes the instance of authr
- * @private
- */
-Authr.prototype.close = function () {
-  process.removeListener('SIGINT', this.close);
-  this.config.Adapter.disconnect(function () {
-    return true;
-  });
-};
 
 module.exports = Authr;
