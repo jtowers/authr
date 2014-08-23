@@ -4,12 +4,10 @@ var async = require('async');
 
 /**
  * Check a user's password and return the user if it is correct.
- * @function
- * @name Login
  * @param {Object} config - authr configuration object
  * @param {Object} user - username and password supplied by the user. Should be {username: 'foo', password:'bar'}
  * @param {Callback} callback - Execute a callback when finished. Will contain err and user object.
- * @return {Callback}
+ * @return {LoginCallback}
  */
 
 var Login = function(config, login, callback){
@@ -67,5 +65,12 @@ var Login = function(config, login, callback){
     callback(err, user);
   });
 };
+
+/**
+ * Handles login response
+ * @callback LoginCallback
+ * @param {String} err - error, if it exists
+ * @param {Object} user - user that was logged in
+ */
 
 module.exports = Login;

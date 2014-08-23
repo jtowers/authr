@@ -8,8 +8,7 @@ var async = require('async');
  * @name Signup
  * @param {Object} config - authr config
  * @param {Object} signup - cser object to be persisted to the database
- * @param {Callback} cb - callback to execute when signup finishes
- * @return {Callback}
+ * @param {signupCallback} callback - callback to execute when signup finishes
  */
 var Signup = function(config, signup, callback){
   var self = this;
@@ -76,5 +75,11 @@ var Signup = function(config, signup, callback){
   });
 };
 
+/**
+ * Handles signup response
+ * @callback signupCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that the token was generated for
+ */
 
 module.exports = Signup;

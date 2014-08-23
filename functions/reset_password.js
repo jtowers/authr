@@ -6,8 +6,7 @@ var async = require('async');
  * Generate a password reset token and save it to the db
  * @param {Object} config - authr configuration object
  * @param {String} email - email address to look up
- * @param {Callback} callback - callback to run when finished
- * @return {Callback}
+ * @param {_generateTokenCallback} callback - callback to run when finished
  */
 var _generateToken = function(config, email, callback){
   async.waterfall([
@@ -42,7 +41,19 @@ var _generateToken = function(config, email, callback){
   });
 };
 
+/**
+ * Handles _generateToken response
+ * @callback _generateTokenCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that the token was generated for
+ */
 
+/**
+ * Generate a password reset token and save it to the db
+ * @param {Object} config - authr configuration object
+ * @param {String} token - token to verify
+ * @param {_verifyTokenCallback} callback - callback to run when finished
+ */
 var _verifyToken = function(config, token, callback){
   async.waterfall([
     function(next){
@@ -70,7 +81,19 @@ var _verifyToken = function(config, token, callback){
   });
 };
 
+/**
+ * Handles _verifyToken response
+ * @callback _verifyTokenCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that the token was verified against
+ */
 
+/**
+ * Generate a password reset token and save it to the db
+ * @param {Object} config - authr configuration object
+ * @param {Object} login - object containing username to update and new password
+ * @param {_resetPasswordCallback} callback - callback to run when finished
+ */
 var _resetPassword = function(config, login, callback){
   async.waterfall([
     function(next){
@@ -97,6 +120,13 @@ var _resetPassword = function(config, login, callback){
     callback(err, user);
   });
 };
+
+/**
+ * Handles _resetPassword response
+ * @callback _resetPasswordCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that was updated
+ */
 
 module.exports = {
   generateToken: _generateToken,

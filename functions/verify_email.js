@@ -1,6 +1,12 @@
 /** @module authr-verify */
 var async = require('async');
 
+/**
+ * Verify a user's email address
+ * @param {Object} config - authr configuration object
+ * @param {String} token - token to verify
+ * @param {VerifyCallback} callback - execute callback after verification
+ */
 Verify = function(config, token, callback){
   async.waterfall([
     function(next){
@@ -28,5 +34,11 @@ Verify = function(config, token, callback){
   });
 };
 
+/**
+ * Handles verify response
+ * @callback VerifyCallback
+ * @param {String} err - error, if it exists
+ * @param {Object} user - user that was verified
+ */
 
 module.exports = Verify;

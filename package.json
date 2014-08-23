@@ -1,6 +1,6 @@
 {
   "name": "authr",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Simple, flexible authorization and signup for apps.",
   "main": "index.js",
   "scripts": {
