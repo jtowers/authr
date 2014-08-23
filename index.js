@@ -31,11 +31,8 @@ function Authr(config) {
 
 /**
  * Signup function exposed to user.
- * @function
- * @name signUp
  * @param {Object} signup - User object to be persisted to database
- * @param {Function} callback - Run callback when finished if it exists
- * @return {Callback}
+ * @param {signUpCallback} callback - Run callback when finished if it exists
  * @example
  * // Returns the user object that was inserted into the database
  * var Authr = require('authr');
@@ -54,12 +51,24 @@ Authr.prototype.signUp = function (signup, callback) {
 };
 
 /**
+ * Function to handle signUp response
+ * @callback signUpCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that was signed up
+ */
+
+/**
  * Logs a user in
- * @function
- * @name login
  * @param {Object} login - username and password to log in with
- * @return {Callback}
- * @todo Implement this
+ * @return {loginCallback}
+ * @example
+ * // Returns the user object that was logged into
+ * var Authr = require('authr');
+ * var authr = new Authr('./config.json');
+ * var login = {username: 'test@test.com', password:'test'}
+ * authr.login(login, function(err, user){
+ *     console.log(user)
+ * });
  */
 Authr.prototype.login = function (login, callback) {
   Login(this.config, login, function (err, user) {
@@ -70,12 +79,23 @@ Authr.prototype.login = function (login, callback) {
 };
 
 /**
+ * Function to handle login response
+ * @callback loginCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that was logged in
+ */
+
+/**
  * Verifies a user email address.
- * @function
- * @name verifyEmail
  * @param {Object} token - token to verify
- * @param {Callback} callback - execute callback when function finishes
- * @return {Callback}
+ * @param {verifyEmailCallback} callback - execute callback when function finishes
+ * @example
+ * // Returns the user object for the user that was verified
+ * var Authr = require('authr');
+ * var authr = new Authr('./config.json');
+ * authr.verifyEmail(token_from_signup, function(err, user){
+ *     console.log(user);
+ * });
  */
 Authr.prototype.verifyEmail = function (token, callback) {
   Verify(this.config, token, function (err, user) {
@@ -86,11 +106,23 @@ Authr.prototype.verifyEmail = function (token, callback) {
 };
 
 /**
+ * Function to handle verifyEmail response
+ * @callback verifyEmailCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that was verified
+ */
+
+/**
  * Generates a password reset token for a user
- * @function
- * @name createPasswordResetToken
  * @param {String} email_address - email address to generate a reset token for
- * @return {Callback} callback - return a callback after the token is generated
+ * @return {createPasswordResetTokenCallback} callback - return a callback after the token is generated
+ * @example
+ * // Returns the user object for the user that requested the reset, including the token
+ * var Authr = require('authr');
+ * var authr = new Authr('./config.json');
+ * authr.createPasswordResetToken('test@test.com', function(err, user){
+ *     console.log(user);
+ * });
  */
 Authr.prototype.createPasswordResetToken = function (email_address, callback) {
   Reset.generateToken(this.config, email_address, function (err, user) {
@@ -101,11 +133,23 @@ Authr.prototype.createPasswordResetToken = function (email_address, callback) {
 };
 
 /**
+ * Function to handle createPasswordResetToken response
+ * @callback createPasswordResetTokenCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user object, including the newly created token
+ */
+
+/**
  * Verifies a password reset token
- * @function
- * @name verifyPasswordResetToken
  * @param {String} token - token to verify
- * @return {Callback} callback - return a callback after the token is verified
+ * @return {verifyPasswordResetTokenCallback} callback - return a callback after the token is verified
+ * @example
+ * // Returns the user object that the token was verified against
+ * var Authr = require('authr');
+ * var authr = new Authr('./config.json');
+ * authr.verifyPasswordResetToken(token_from_createPasswordResetToken, function(err, user){
+ *     console.log(user);
+ * });
  */
 Authr.prototype.verifyPasswordResetToken = function (token, callback) {
   Reset.verifyToken(this.config, token, function (err, user) {
@@ -116,31 +160,56 @@ Authr.prototype.verifyPasswordResetToken = function (token, callback) {
 };
 
 /**
- * Update password
- * @function
- * @name updatePassword
- * @param {String} username - username to update
- * @param {String} password - password to update to
- * @return {Callback} callback - return a callback after the token is verified
+ * Function to handle verifPasswordResetToken response
+ * @callback verifyPasswordResetTokenCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that the token was verified against
  */
-Authr.prototype.updatePassword = function (username, password, callback) {
-  Reset.resetPassword(this.config, username, password, function (err, user) {
+
+/**
+ * Reset a user's password
+ * @param {Object} login - object containing username and new password
+ * @return {updatePasswordCallback} callback - return a callback after the token is verified
+ * @example
+ * // Returns the user that updated their password
+ * var Authr = require('authr');
+ * var authr = new Authr('./config.json');
+ * var signup = {username:'test@test.com', passowrd:'brand_new_password'};
+ * authr.updatePassword(login, function(err, user){
+ *     console.log(user);
+ * });
+ */
+Authr.prototype.updatePassword = function (login, callback) {
+  Reset.resetPassword(this.config,login ,function (err, user) {
     if(callback) {
       return callback(err, user);
     }
   });
 };
+
+/**
+ * Function to handle updatePassword response
+ * @callback updatePasswordCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that was reset
+ */
 
 /**
  * Delete account
- * @function
- * @name deleteAccount
- * @param {String} username - username of user to delete
- * @param {String} password - account password
- * @return {Callback} callback - return a callback after account is deleted
+ * @param {Object} login - username/password of user to delete
+ * @return {deleteAccountCallback} callback - return a callback after account is deleted
+ * @example
+ * // Deletes a user and returns their account in case you need it for something
+ * var Authr = require('authr');
+ * var authr = new Authr('./config.json');
+ * // require username and password again to verify account deletion
+ * var login = {username: 'test@test.com', password:'test'};
+ * authr.deleteAccount(login, function(err, user){
+ *     console.log(user)
+ * });
  */
-Authr.prototype.deleteAccount = function (username, password, callback) {
-  Delete(this.config, username, password, function (err, user) {
+Authr.prototype.deleteAccount = function (login, callback) {
+  Delete(this.config, login, function (err, user) {
     if(callback) {
       return callback(err, user);
     }
@@ -148,9 +217,15 @@ Authr.prototype.deleteAccount = function (username, password, callback) {
 };
 
 /**
+ * Function to handle deleteAccount response
+ * @callback deleteAccountCallback
+ * @param {String} err - error message, if it exists
+ * @param {Object} user - user that was signed deleted
+ */
+
+/**
  * Sets default database configuration - in-memory nedb. Does not set any mising options.
- * @function
- *@name db
+ * @private
  */
 Authr.prototype.db = function () {
   if(!this.config.db) {
@@ -163,9 +238,7 @@ Authr.prototype.db = function () {
 
 /**
  * Sets default error message text
- *
- * @function
- * @name errormsgconfig
+ * @private
  */
 Authr.prototype.errormsg = function () {
   if(!this.config.errmsg) {
@@ -174,11 +247,12 @@ Authr.prototype.errormsg = function () {
       email_address_taken: 'This email address is already in use. Please try again.',
       token_not_found: 'This token does not exist. Please try again.',
       token_expired: 'This token has expired. A new one has been generated.',
-      un_and_pw_required: 'A username and password are required to log in.',
+      un_and_pw_required: 'Username and/or password are required',
       username_not_found: 'Your username and/or password is invalid. Please try again.',
       password_incorrect: 'Your username and/or password is invalid. Please try again.',
       account_locked: 'Too many failed attempts. This account will be locked for ##i## minutes.',
-      email_address_not_verified: 'Your email address is not verified. Please click the link in the verification email to activate your account.'
+      email_address_not_verified: 'Your email address is not verified. Please click the link in the verification email to activate your account.',
+      email_address_not_found: 'Could not find this email address. Please try again.'
     };
   } else {
     if(!this.config.errmsg.username_taken) {
@@ -210,15 +284,16 @@ Authr.prototype.errormsg = function () {
     if(!this.config.errmsg.email_address_taken) {
       this.config.errmsg.email_address_taken = 'This email address is already in use. Please try again.';
     }
+    if(!this.config.errmsg.email_address_not_found){
+      this.config.errmsg.email_address_not_found = 'Could not find this email address. Please try again.';
+    }
   }
 
 };
 
 /**
  * Sets default user config if it is missing or checks for any missing options and sets defaults.
- *
- * @function
- * @name userconfig
+ * @private
  */
 Authr.prototype.user = function () {
   if(!this.config.user) {
@@ -285,10 +360,8 @@ Authr.prototype.user = function () {
 };
 
 /**
- * Sets default security config. Checks for a missing config and sets all defaults or checks for missing options and sets defaults for any missing options.
- *
- * @function
- * @name security
+ * Sets default security config. Checks for a missing config and sets all defaults or checks for missing options and sets defaults for any missing options
+ * @private
  */
 Authr.prototype.security = function () {
   if(!this.config.security) {
@@ -342,9 +415,7 @@ Authr.prototype.security = function () {
 
 /**
  * Gets a new instance of the adapter depending on the db type specified in the config
- *
- * @function
- * @name getAdapter
+ * @private
  */
 Authr.prototype.getAdapter = function () {
   var self = this;
@@ -361,6 +432,10 @@ Authr.prototype.getAdapter = function () {
 
 };
 
+/**
+ * Closes the instance of authr
+ * @private
+ */
 Authr.prototype.close = function () {
   process.removeListener('SIGINT', this.close);
   this.config.Adapter.disconnect(function () {

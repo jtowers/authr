@@ -254,14 +254,12 @@ Call `authr.verifyEmail()` and pass it a signup token to verify a user's email a
 The callback will pass an error (null if there isn't one) and the user that was verified.
 
 ```
+// Returns the user object for the user that was verified
 var Authr = require('authr');
-var authr = new Authr(); // will use the default options
-
-authr.verifyEmail('f40ef123d312c69ffc062190df614b95', function(err, user){
-    console.log(err); // will return an error message if the verification failed.
-    console.log(user); // will return the user object for the verified user
+var authr = new Authr('./config.json');
+authr.verifyEmail(token_from_signup, function(err, user){
+    console.log(user);
 });
-
 ```
 
 Errors are returned if the token isn't found or if it is expired.
@@ -319,14 +317,14 @@ authr.createPasswordResetToken(email_address, function(err, token){
     // do something to send the user the reset token
 });
 
-// pass a token to verify
+// pass a token to verify that it exists and get the user back
 authr.verifyPasswordResetToken(token, function(err, user){
     // If the token exists and is not expired, prompt the user for a new password
 
 });
 
 // Pass a username and a new password
-authr.updatePassword(username, password, function(err, user){
+authr.updatePassword({username:username_to_update, password:brand_new_password} function(err, user){
     // Send a response to the user to confirm the update. It would probably be a good idea to send an email, too.
 });
 

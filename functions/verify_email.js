@@ -1,33 +1,44 @@
 /** @module authr-verify */
 var async = require('async');
 
+/**
+ * Verify a user's email address
+ * @param {Object} config - authr configuration object
+ * @param {String} token - token to verify
+ * @param {VerifyCallback} callback - execute callback after verification
+ */
 Verify = function(config, token, callback){
-  async.series([
+  async.waterfall([
     function(next){
       config.Adapter.findVerificationToken(token, function(err, user){
-        next(err);
+        next(err, user);
       });
     },
-    function(next){
-      var isExpired = config.Adapter.emailVerificationExpired();
+    function(user, next){
+      var isExpired = config.Adapter.emailVerificationExpired(user);
       if(isExpired){
-       
-        config.Adapter.doEmailVerification(config.Adapter.user, function(err, user){
-          next({err:config.errmsg.token_expired, user: user});
+        config.Adapter.doEmailVerification(user, function(err, user){
+          next({err:config.errmsg.token_expired, user:user});
         });
       } else {
-     
-        next(null);
+        next(null, user);
       }
     },
-    function(next){
-      config.Adapter.verifyEmailAddress(function(err, user){
+    function(user, next){
+      config.Adapter.verifyEmailAddress(user, function(err, user){
         next(err, user);
       });
     }
-  ],function(err, result){
-    return callback(err, config.Adapter.user);
+  ], function(err, user){
+    callback(err, user);
   });
 };
+
+/**
+ * Handles verify response
+ * @callback VerifyCallback
+ * @param {String} err - error, if it exists
+ * @param {Object} user - user that was verified
+ */
 
 module.exports = Verify;

@@ -4,76 +4,73 @@ var async = require('async');
 
 /**
  * Check a user's password and return the user if it is correct.
- * @function
- * @name Login
  * @param {Object} config - authr configuration object
  * @param {Object} user - username and password supplied by the user. Should be {username: 'foo', password:'bar'}
  * @param {Callback} callback - Execute a callback when finished. Will contain err and user object.
- * @return {Callback}
+ * @return {LoginCallback}
  */
-var Login = function (config, user, callback) {
-  async.series([
-    function (next) {
 
-      if(user.username.length === 0 || user.password.length === 0) {
-
-        next(config.errmsg.un_and_pw_required, null);
-      } else {
-        next();
-      }
+var Login = function(config, login, callback){
+  async.waterfall([
+    function(next){
+      config.Adapter.checkCredentials(login, function(err, user){
+        next(err, user);
+      });
     },
-    function (next) {
-      config.Adapter.isValueTaken(user, config.user.username, function (foundUser) {
-
-        if(foundUser) {
-          next();
+    function(user, next){
+      config.Adapter.isValueTaken(login, config.user.username, function(err, user){
+        if(user){
+          next(null, user);
         } else {
-
           next(config.errmsg.username_not_found);
         }
       });
     },
-    function (next) {
-      config.Adapter.comparePassword(user.password, function (err) {
-        next(err);
+    function(user, next){
+      if(config.security.max_failed_login_attempts) {
+        config.Adapter.failedAttemptsExpired(user, function (err, reset) {
+          next(err,user);
+        });
+      } else {
+        next(null, user);
+      }
+    },
+    function(user, next){
+      config.Adapter.comparePassword(user, login, function(err, user){
+        next(err,user);
       });
     },
-    function(next){
+    function(user, next){
       if(config.security.email_verification){
-        isVerified = config.Adapter.isEmailVerified();
+        var isVerified = config.Adapter.isEmailVerified(user);
         if(isVerified){
-
-          next();
+          next(null, user);
         } else {
-
-          next({err:config.errmsg.email_address_not_verified, user: config.Adapter.user});
+          next({err:config.errmsg.email_address_not_verified, user:user});
         }
       } else {
-        next();
+        next(null, user);
       }
     },
-    function (next) {
-
-      if(config.security.max_failed_login_attempts > 0) {
-        config.Adapter.isAccountLocked(function (err, locked) {
-          next(err);
+    function(user, next){
+      if(config.security.max_failed_login_attempts){
+        config.Adapter.isAccountLocked(user, function(err, isLocked){
+          next(err, user);
         });
-      } else {
-        next();
-      }
-    },
-    function (next) {
-      if(config.security.max_failed_login_attempts) {
-        config.Adapter.failedAttemptsExpired(function (err, reset) {
-          next();
-        });
-      } else {
-        next();
+      }else {
+        next(null, user);
       }
     }
-  ], function (error) {
-    return callback(error, config.Adapter.user);
+  ], function(err, user){
+    callback(err, user);
   });
 };
+
+/**
+ * Handles login response
+ * @callback LoginCallback
+ * @param {String} err - error, if it exists
+ * @param {Object} user - user that was logged in
+ */
 
 module.exports = Login;
