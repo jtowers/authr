@@ -431,10 +431,11 @@ Authr.prototype.getAdapter = function () {
     break;
   default:
     Adapter = require('authr-nedb');
-    self.config.Adapter = new Adapter(self.config);
     break;
   }
-
+self.config.Adapter = new Adapter(self.config);
+self.config.Adapter.connect(function(err){
+});
 };
 
 
