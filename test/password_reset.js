@@ -122,7 +122,6 @@ describe('password reset module', function () {
       authr.updatePassword(token,'password2', function(err, _user){
         should.not.exist(err);
         should.exist(_user);
-        _user.should.equal(1);
         done();
       });
     });
