@@ -311,7 +311,7 @@ Authr.prototype.user = function () {
       account_locked_until: 'account_locked_until',
       account_failed_attempts: 'account_failed_attempts',
       account_last_failed_attempt: 'account_last_failed_attempt',
-      email_address: 'account_username',
+      email_address: 'username',
       email_verified: 'email_verified',
       email_verification_hash: 'email_verification_hash',
       email_verification_hash_expires: 'email_verification_expires'
