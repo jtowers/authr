@@ -33,6 +33,7 @@ var _generateToken = function(config, email, callback){
     },
     function(user, token, next){
      config.Adapter.savePWResetToken(user, token, function(err, user){
+ 
        next(err, user);
      });
     }
@@ -91,29 +92,44 @@ var _verifyToken = function(config, token, callback){
 /**
  * Generate a password reset token and save it to the db
  * @param {Object} config - authr configuration object
- * @param {Object} login - object containing username to update and new password
+ * @param {String} token - object containing username to update and new password
+ * @param {String} password - new password
  * @param {_resetPasswordCallback} callback - callback to run when finished
  */
-var _resetPassword = function(config, login, callback){
+var _resetPassword = function(config, token, password, callback){
   async.waterfall([
     function(next){
-      config.Adapter.checkCredentials(login, function(err, login){
-        next(err, login);
+        if(!token){
+           next(config.errmsg.token_missing);
+        }
+
+        if(!password){
+            next(config.errmsg.un_and_pw_required);
+        }
+        login = {password:password};
+        next(null, login);
+    },
+      function(login, next){
+      config.Adapter.findResetToken(token, function(err, user){
+        next(err, user, login);
       });
     },
-    function(login, next){
-      config.Adapter.isValueTaken(login, config.user.username, function(err, user){
-        next(err, user);
-      });
+    function(user,login, next){
+      var isExpired = config.Adapter.resetTokenExpired(user);
+      if(isExpired){
+        next(config.errmsg.token_expired, user);
+      } else {
+        next(null, user, login);
+      }
     },
-    function(user, next){
+    function(user,login, next){
       config.Adapter.hashPassword(login, user, config.user.password, function(err, user){
         next(err, user);
       });
     },
    function(user, next){
      config.Adapter.resetPassword(user, function(err, user){
-      next(err, user);
+      next(null, user);
     });
    }
   ], function(err, user){
