@@ -36,6 +36,8 @@ var Signup = function(config, signup, callback){
             next(null, signup);
           }
         });
+      } else {
+          next(null,signup);
       }
     },
     function(signup, next){

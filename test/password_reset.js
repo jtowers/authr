@@ -106,10 +106,12 @@ describe('password reset module', function () {
   });
   
   describe('password reset', function(){
+      var token;
     beforeEach(function(done){
-      authr.createPasswordResetToken(user.email_address, function(err, token){
+      authr.createPasswordResetToken(user.email_address, function(err, _token){
+          token = _token.password_reset_token;
         if(err) throw err;
-        authr.verifyPasswordResetToken(token.password_reset_token, function(err, user){
+        authr.verifyPasswordResetToken(_token.password_reset_token, function(err, user){
           if(err) throw err;
           done();
         });
@@ -117,7 +119,7 @@ describe('password reset module', function () {
     });
 
     it('should reset passwords', function(done){
-      authr.updatePassword({username:'test@test.com', password:'test2'}, function(err, _user){
+      authr.updatePassword(token,'password2', function(err, _user){
         should.not.exist(err);
         should.exist(_user);
         _user.should.equal(1);

@@ -287,25 +287,33 @@ authr.login(credentials, function(err, user){
     console.log(user); // will return the user object, including the id, returned from the database.
 });
 ```
+
+*Note: If you are using the default nedb adapter or the mongodb adapter, the `credentials` hash should follow the same schema defined in the authr config*
+
 After attempting a login, `err` will either contain the relevant error message from the errmsg object in config, or it will return that and any relevant details (e.g., the datetime the account is locked until or the number of remaining failed attempts).
 
 ## Password Recovery
 authr has a password recovery process that takes place in three steps.
 
-1. The user requests a new password to be sent to their email address.
+1. The user requests a new password to be sent to their email address
+
 This will generate a new token. Call `authr.createPasswordResetToken()` and pass it an email address.
 
 It can return a token that you can email to the user or communicate via some other channel.
 
-2. The token should be verified
+2. The token is verified
+
 Call `authr.verifyPasswordResetToken()` and pass it a token to verify that it exists and is not expired.
 
 This will return the associated user object.
 
 3. Password update
-Call `authr.updatePassword()` and pass it a username and password to update the password.
+
+Call `authr.updatePassword()` and pass it a token and a new passowrd to update the user's password.
 
 This will return the associated user object so you can email a confirmation.
+
+Once a password is updated, the token is removed
 
 A full workflow might look something like this:
 ```
@@ -324,7 +332,7 @@ authr.verifyPasswordResetToken(token, function(err, user){
 });
 
 // Pass a username and a new password
-authr.updatePassword({username:username_to_update, password:brand_new_password} function(err, user){
+authr.updatePassword(token, new_password, function(err, user){
     // Send a response to the user to confirm the update. It would probably be a good idea to send an email, too.
 });
 
