@@ -134,12 +134,6 @@ describe('default adapter', function () {
 
     });
 
-    afterEach(function(done){
-      adapter.resetCollection(function(){
-        done();
-      });
-    });
-
     describe('utilities', function () {
       it('should be able to get the value of an object using a string indicating its path', function (done) {
         var username = adapter.getVal(signup_config, 'account.username');
@@ -159,7 +153,7 @@ describe('default adapter', function () {
       });
 
       it('should be able to hash a password', function (done) {
-        adapter.hashPassword(signup_config,signup_config,adapter.config.user.password, function (err, user) {
+        adapter.hashPassword(signup_config, signup_config, adapter.config.user.password, function (err, user) {
           should.not.exist(err);
           should.exist(user);
           done();
@@ -219,7 +213,7 @@ describe('default adapter', function () {
             throw err;
           }
           adapter.buildAccountSecurity(user);
-          adapter.hashPassword(user,user, adapter.config.user.password, function () {
+          adapter.hashPassword(user, user, adapter.config.user.password, function () {
             adapter.saveUser(user, function (err, user) {
               saved_user = user;
               done();
@@ -258,17 +252,60 @@ describe('default adapter', function () {
       });
 
       it('should be able to mark email_verified as true', function (done) {
-        
-        adapter.verifyEmailAddress(saved_user, function(err, user){
+        adapter.verifyEmailAddress(saved_user, function (err, user) {
           should.exist(user);
           done();
         });
 
-
       });
+      
+            it('should return true if a password reset token is expired', function(done){
+        saved_user.account.password_reset_token_expiration = moment().add(-1, 'hours').toDate();
+        adapter.resetTokenExpired(saved_user).should.equal(true);
+        done();
+      });
+      
+      it('should return false if a password reset token is not expired', function(done){
+        saved_user.account.password_reset_token_expiration = moment().add(12, 'hours').toDate();
+        adapter.resetTokenExpired(saved_user).should.equal(false);
+        done();
+      });
+      
+      it('should be able to find a user by an email address', function(done){
+        adapter.getUserByEmail('test@test.com', function(err, user){
+          should.exist(user);
+          done();
+        });
+      });
+      it('should return error if email address is not found', function(done){
+        adapter.getUserByEmail('test2@test.com', function(err, user){
+          should.exist(err);
+          done();
+        });
+      });
+      
+      it('should return error if username is not found', function(done){
+        adapter.getUserByUsername('test2@test.com', function(err, user){
+          should.exist(err);
+          done();
+        });
+      });
+      
       it('should return false if the account is not locked', function (done) {
         adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
-          adapter.isAccountLocked(usr,function (err, locked) {
+          adapter.isAccountLocked(usr, function (err, locked) {
+            should.not.exist(err);
+            locked.should.equal(false);
+            done();
+          });
+        });
+      });
+      
+            it('should return false if the account is locked but the lock is expired', function (done) {
+        adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
+          usr.account.locked.account_locked = true;
+          usr.account.locked.account_locked_until = moment().add(-1, 'hours').toDate();
+          adapter.isAccountLocked(usr, function (err, locked) {
             should.not.exist(err);
             locked.should.equal(false);
             done();
@@ -285,6 +322,13 @@ describe('default adapter', function () {
           });
         });
       });
+      
+it('should be able to check to see if an email address is verified', function(done){
+  adapter.isEmailVerified(saved_user).should.equal(false);
+  done();
+});
+      
+
 
       it('should be able to unlock an account', function (done) {
         adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
@@ -320,7 +364,7 @@ describe('default adapter', function () {
 
       it('should lock an account after the specified number of failed login attempts', function (done) {
         adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
-         usr = adapter.buildQuery(usr, adapter.config.user.account_failed_attempts, adapter.config.security.max_failed_login_attempts);
+          usr = adapter.buildQuery(usr, adapter.config.user.account_failed_attempts, adapter.config.security.max_failed_login_attempts);
           adapter.incrementFailedLogins(usr, function () {
             usr.account.locked.account_locked.should.equal(true);
             done();
@@ -330,7 +374,12 @@ describe('default adapter', function () {
 
       it('should increment the number of failed attempts when a bad password is supplied', function (done) {
         adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
-          login = {account:{username: 'test@test.com', password:'not_really_it'}};
+          login = {
+            account: {
+              username: 'test@test.com',
+              password: 'not_really_it'
+            }
+          };
           adapter.comparePassword(usr, login, function (err, doc) {
             should.exist(err);
             err.remaining_attempts.should.equal(9);
@@ -339,15 +388,84 @@ describe('default adapter', function () {
         });
       });
 
-      it('should return null when the password is correct', function (done) {
+      it('should return null when the password is correct and hashing is on', function (done) {
         adapter.isValueTaken(saved_user, adapter.config.user.username, function (err, usr) {
-          login = {account:{username:'test@test.com', password:'test'}};
+          login = {
+            account: {
+              username: 'test@test.com',
+              password: 'test'
+            }
+          };
           adapter.comparePassword(usr, login, function (err, doc) {
             should.not.exist(err);
             done();
           });
         });
       });
+
+      it('should return null when the password is correct and hashing is off', function (done) {
+        var user_to_save = {
+          account: {
+            username: 'test@test.com',
+            password: 'test'
+          }
+        };
+        var saved_user;
+        adapter.config.security.hash_password = false;
+
+        adapter.doEmailVerification(user_to_save, function (err, user) {
+          if(err) {
+            throw err;
+          }
+          adapter.buildAccountSecurity(user);
+          adapter.saveUser(user, function (err, user) {
+            saved_user = user;
+            adapter.comparePassword(saved_user, user_to_save, function (err, user) {
+              should.not.exist(err);
+              done();
+            });
+
+          });
+        });
+
+      });
+
+    
+
+      it('should return error when the password is incorrect, hashing is off, and locking is off', function (done) {
+        var user_to_save = {
+          account: {
+            username: 'test@test.com',
+            password: 'test'
+          }
+        };
+        var saved_user;
+        adapter.config.security.hash_password = false;
+        adapter.config.security.max_failed_login_attempts = 0;
+
+        adapter.doEmailVerification(user_to_save, function (err, user) {
+          if(err) {
+            throw err;
+          }
+          adapter.buildAccountSecurity(user);
+          adapter.saveUser(user, function (err, user) {
+            saved_user = user;
+            adapter.comparePassword(saved_user, {
+              account: {
+                username: 'test@test.com',
+                password: 'not_really_it'
+              }
+            }, function (err, user) {
+              should.exist(err);
+              err.should.equal(adapter.config.errmsg.password_incorrect);
+              done();
+            });
+
+          });
+        });
+
+      });
+
       it('should be able to save a password reset token', function (done) {
         adapter.getUserByUsername('test@test.com', function (err, user) {
           if(err) throw err;
@@ -379,14 +497,18 @@ describe('default adapter', function () {
         });
       });
 
-
       it('should be able to save a new password on password update', function (done) {
-        var login = {account:{username:'test@test.com', password:'test'}};
-        adapter.isValueTaken(login,'account.username', function (err, user) {
-          adapter.hashPassword(login,user,'account.password', function (err, user) {
-            adapter.resetPassword(user,function (err, usr) {
+        var login = {
+          account: {
+            username: 'test@test.com',
+            password: 'test'
+          }
+        };
+        adapter.isValueTaken(login, 'account.username', function (err, user) {
+          adapter.hashPassword(login, user, 'account.password', function (err, user) {
+            adapter.resetPassword(user, function (err, usr) {
               should.not.exist(err);
-              usr.should.equal(1);
+              should.exist(usr);
               done();
             });
 
@@ -395,7 +517,7 @@ describe('default adapter', function () {
 
       });
       it('should be able to delete a user', function (done) {
-        adapter.deleteAccount(saved_user, function(err, user){
+        adapter.deleteAccount(saved_user, function (err, user) {
           should.not.exist(err);
           should.exist(user);
           done();
