@@ -7,9 +7,11 @@ authr is an app signup/authentication module inspired by [Lockit](https://github
 
 It is designed to be framework-independent (i.e., doesn't require Express) and to give you greater control over your user schema and the login process.
 
+In addition to allowing you to specify the names of fields to match your database schema, it also allows you to pass custom fields to the signup method if you collect additional information from users when they sign up.In
+
 This module is in active development.
 
-The core module currently will cover:
+The core module has the following features:
 
 1. User signup
 2. Email verification
@@ -19,14 +21,13 @@ The core module currently will cover:
 
 Additional adapters allow you to persist data to different database types. Currently supported types are:
 
-* In-Memory NeDB
-* MongoDB
+* [n-Memory NeDB (default, for testing)
+* [MongoDB](https://github.com/jtowers/authr-mongo)
+* [SQL (using Sequelize)](https://github.com/jtowers/authr-sql)
 
 
 I have plans to add support for:
 
-* sqlite
-* mysql
 * couchdb
 * rethinkdb
 
@@ -130,6 +131,13 @@ For example, if your schema looks like this:
 ```
 
 You could set the username field in your config hash to `{user: {username: 'account.username'}}` to save and retreive the username from the correct location in the document.
+
+#### Custom fields
+
+You can also collect other information on signup and save it to the database when the account is created. Simply include them in the signup hash that you pass to `authr.signUp()`.
+
+If you are using authr-sql, you will need to also specify additional configuration options. See [here](https://github.com/jtowers/authr-sql) for details.
+
 
 ### Security Configuration
 Allows you to set security options. The defaults are:
@@ -344,6 +352,7 @@ This method accepts a callback and will return the user that was removed so that
 
 ## Todo
 
-1. Add support for other adapters
-2. Add support for validation of default and custom fields
+1. Add support for couchdb
+2. Add support for rethinkdb
+3. Add support for validation of default and custom fields
 
