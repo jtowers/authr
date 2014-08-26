@@ -13,24 +13,24 @@ var Delete = require('./functions/delete_account.js');
 
 function Authr(config) {
 
-  // initialize config
-  this.config = config || {};
+    // initialize config
+    this.config = config || {};
 
-  // Check to make sure defaults are not missing.
-  this.db();
-  this.security();
-  this.user();
-  this.errormsg();
+    // Check to make sure defaults are not missing.
+    this.db();
+    this.security();
+    this.user();
+    this.errormsg();
 
-  // create a new adapter
-  this.getAdapter();
-  var self = this;
+    // create a new adapter
+    this.getAdapter();
+    var self = this;
 
-  process.on('SIGINT', function(){
-    self.config.Adapter.disconnect(function () {
-      process.exit(0);
+    process.on('SIGINT', function () {
+        self.config.Adapter.disconnect(function () {
+            process.exit(0);
+        });
     });
-  });
 
 }
 
@@ -48,11 +48,11 @@ function Authr(config) {
  * });
  */
 Authr.prototype.signUp = function (signup, callback) {
-  Signup(this.config, signup, function (err, user) {
-    if(callback) {
-      return callback(err, user);
-    }
-  });
+    Signup(this.config, signup, function (err, user) {
+        if(callback) {
+            return callback(err, user);
+        }
+    });
 };
 
 /**
@@ -76,11 +76,11 @@ Authr.prototype.signUp = function (signup, callback) {
  * });
  */
 Authr.prototype.login = function (login, callback) {
-  Login(this.config, login, function (err, user) {
-    if(callback) {
-      return callback(err, user);
-    }
-  });
+    Login(this.config, login, function (err, user) {
+        if(callback) {
+            return callback(err, user);
+        }
+    });
 };
 
 /**
@@ -103,11 +103,11 @@ Authr.prototype.login = function (login, callback) {
  * });
  */
 Authr.prototype.verifyEmail = function (token, callback) {
-  Verify(this.config, token, function (err, user) {
-    if(callback) {
-      return callback(err, user);
-    }
-  });
+    Verify(this.config, token, function (err, user) {
+        if(callback) {
+            return callback(err, user);
+        }
+    });
 };
 
 /**
@@ -130,11 +130,11 @@ Authr.prototype.verifyEmail = function (token, callback) {
  * });
  */
 Authr.prototype.createPasswordResetToken = function (email_address, callback) {
-  Reset.generateToken(this.config, email_address, function (err, user) {
-    if(callback) {
-      return callback(err, user);
-    }
-  });
+    Reset.generateToken(this.config, email_address, function (err, user) {
+        if(callback) {
+            return callback(err, user);
+        }
+    });
 };
 
 /**
@@ -157,11 +157,11 @@ Authr.prototype.createPasswordResetToken = function (email_address, callback) {
  * });
  */
 Authr.prototype.verifyPasswordResetToken = function (token, callback) {
-  Reset.verifyToken(this.config, token, function (err, user) {
-    if(callback) {
-      return callback(err, user);
-    }
-  });
+    Reset.verifyToken(this.config, token, function (err, user) {
+        if(callback) {
+            return callback(err, user);
+        }
+    });
 };
 
 /**
@@ -185,11 +185,11 @@ Authr.prototype.verifyPasswordResetToken = function (token, callback) {
  * });
  */
 Authr.prototype.updatePassword = function (token, password, callback) {
-  Reset.resetPassword(this.config, token, password, function (err, user) {
-    if(callback) {
-      return callback(err, user);
-    }
-  });
+    Reset.resetPassword(this.config, token, password, function (err, user) {
+        if(callback) {
+            return callback(err, user);
+        }
+    });
 };
 
 /**
@@ -214,11 +214,11 @@ Authr.prototype.updatePassword = function (token, password, callback) {
  * });
  */
 Authr.prototype.deleteAccount = function (login, callback) {
-  Delete(this.config, login, function (err, user) {
-    if(callback) {
-      return callback(err, user);
-    }
-  });
+    Delete(this.config, login, function (err, user) {
+        if(callback) {
+            return callback(err, user);
+        }
+    });
 };
 
 /**
@@ -233,11 +233,11 @@ Authr.prototype.deleteAccount = function (login, callback) {
  * @private
  */
 Authr.prototype.db = function () {
-  if(!this.config.db) {
-    this.config.db = {
-      type: 'nedb'
-    };
-  }
+    if(!this.config.db) {
+        this.config.db = {
+            type: 'nedb'
+        };
+    }
 
 };
 
@@ -246,53 +246,53 @@ Authr.prototype.db = function () {
  * @private
  */
 Authr.prototype.errormsg = function () {
-  if(!this.config.errmsg) {
-    this.config.errmsg = {
-      username_taken: 'This username is taken Please choose another.',
-      email_address_taken: 'This email address is already in use. Please try again.',
-      token_not_found: 'This token does not exist. Please try again.',
-      token_expired: 'This token has expired. A new one has been generated.',
-      un_and_pw_required: 'Username and/or password are required',
-      username_not_found: 'Your username and/or password is invalid. Please try again.',
-      password_incorrect: 'Your username and/or password is invalid. Please try again.',
-      account_locked: 'Too many failed attempts. This account will be locked for ##i## minutes.',
-      email_address_not_verified: 'Your email address is not verified. Please click the link in the verification email to activate your account.',
-      email_address_not_found: 'Could not find this email address. Please try again.'
-    };
-  } else {
-    if(!this.config.errmsg.username_taken) {
-      this.config.errmsg.username_taken = 'This username is taken. Please choose another';
-    }
-    if(!this.config.errmsg.token_not_found) {
-      this.config.errmsg.token_not_found = 'This signup token does not exist. Please try again.';
-    }
-    if(!this.config.errmsg.token_expired) {
-      this.config.errmsg.token_expired = 'This token has expired. A new one has been generated.';
-    }
+    if(!this.config.errmsg) {
+        this.config.errmsg = {
+            username_taken: 'This username is taken Please choose another.',
+            email_address_taken: 'This email address is already in use. Please try again.',
+            token_not_found: 'This token does not exist. Please try again.',
+            token_expired: 'This token has expired. A new one has been generated.',
+            un_and_pw_required: 'Username and/or password are required',
+            username_not_found: 'Your username and/or password is invalid. Please try again.',
+            password_incorrect: 'Your username and/or password is invalid. Please try again.',
+            account_locked: 'Too many failed attempts. This account will be locked for ##i## minutes.',
+            email_address_not_verified: 'Your email address is not verified. Please click the link in the verification email to activate your account.',
+            email_address_not_found: 'Could not find this email address. Please try again.'
+        };
+    } else {
+        if(!this.config.errmsg.username_taken) {
+            this.config.errmsg.username_taken = 'This username is taken. Please choose another';
+        }
+        if(!this.config.errmsg.token_not_found) {
+            this.config.errmsg.token_not_found = 'This signup token does not exist. Please try again.';
+        }
+        if(!this.config.errmsg.token_expired) {
+            this.config.errmsg.token_expired = 'This token has expired. A new one has been generated.';
+        }
 
-    if(!this.config.errmsg.un_and_pw_required) {
-      this.config.errmsg.un_and_pw_required = 'A username and password are required to log in.';
-    }
+        if(!this.config.errmsg.un_and_pw_required) {
+            this.config.errmsg.un_and_pw_required = 'A username and password are required to log in.';
+        }
 
-    if(!this.config.errmsg.username_not_found) {
-      this.config.errmsg.username_not_found = 'Username not found. Please try again or sign up.';
+        if(!this.config.errmsg.username_not_found) {
+            this.config.errmsg.username_not_found = 'Username not found. Please try again or sign up.';
+        }
+        if(!this.config.errmsg.password_incorrect) {
+            this.config.errmsg.password_incorrect = 'Password incorrect. Your account will be locked after ##i## more failed attempts.';
+        }
+        if(!this.config.errmsg.account_locked) {
+            this.config.errmsg.account_locked = 'Too many failed attempts. This account will be locked for ##i## minutes.';
+        }
+        if(!this.config.errmsg.email_address_not_verified) {
+            this.config.errmsg.email_address_not_verified = 'Your email address is not verified. Please click the link in the verification email to activate your account.';
+        }
+        if(!this.config.errmsg.email_address_taken) {
+            this.config.errmsg.email_address_taken = 'This email address is already in use. Please try again.';
+        }
+        if(!this.config.errmsg.email_address_not_found) {
+            this.config.errmsg.email_address_not_found = 'Could not find this email address. Please try again.';
+        }
     }
-    if(!this.config.errmsg.password_incorrect) {
-      this.config.errmsg.password_incorrect = 'Password incorrect. Your account will be locked after ##i## more failed attempts.';
-    }
-    if(!this.config.errmsg.account_locked) {
-      this.config.errmsg.account_locked = 'Too many failed attempts. This account will be locked for ##i## minutes.';
-    }
-    if(!this.config.errmsg.email_address_not_verified) {
-      this.config.errmsg.email_address_not_verified = 'Your email address is not verified. Please click the link in the verification email to activate your account.';
-    }
-    if(!this.config.errmsg.email_address_taken) {
-      this.config.errmsg.email_address_taken = 'This email address is already in use. Please try again.';
-    }
-    if(!this.config.errmsg.email_address_not_found) {
-      this.config.errmsg.email_address_not_found = 'Could not find this email address. Please try again.';
-    }
-  }
 
 };
 
@@ -301,67 +301,67 @@ Authr.prototype.errormsg = function () {
  * @private
  */
 Authr.prototype.user = function () {
-  if(!this.config.user) {
-    this.config.user = {
-      username: 'username',
-      password: 'password',
-      password_reset_token: 'password_reset_token',
-      password_reset_token_expiration: 'password_reset_token_expires',
-      account_locked: 'account_locked',
-      account_locked_until: 'account_locked_until',
-      account_failed_attempts: 'account_failed_attempts',
-      account_last_failed_attempt: 'account_last_failed_attempt',
-      email_address: 'username',
-      email_verified: 'email_verified',
-      email_verification_hash: 'email_verification_hash',
-      email_verification_hash_expires: 'email_verification_expires'
-    };
-  } else {
-    if(!this.config.user.username) {
-      this.config.user.username = 'username';
-    }
-    if(!this.config.user.password) {
-      this.config.user.password = 'password';
-    }
-    if(!this.config.user.password_reset_token) {
-      this.config.user.password_reset_token = 'pasword_reset_token';
-    }
-    if(!this.config.user.password_reset_token_expiration) {
-      this.config.user.password_reset_token_expiration = 'pasword_reset_token_expires';
-    }
+    if(!this.config.user) {
+        this.config.user = {
+            username: 'username',
+            password: 'password',
+            password_reset_token: 'password_reset_token',
+            password_reset_token_expiration: 'password_reset_token_expires',
+            account_locked: 'account_locked',
+            account_locked_until: 'account_locked_until',
+            account_failed_attempts: 'account_failed_attempts',
+            account_last_failed_attempt: 'account_last_failed_attempt',
+            email_address: 'username',
+            email_verified: 'email_verified',
+            email_verification_hash: 'email_verification_hash',
+            email_verification_hash_expires: 'email_verification_expires'
+        };
+    } else {
+        if(!this.config.user.username) {
+            this.config.user.username = 'username';
+        }
+        if(!this.config.user.password) {
+            this.config.user.password = 'password';
+        }
+        if(!this.config.user.password_reset_token) {
+            this.config.user.password_reset_token = 'pasword_reset_token';
+        }
+        if(!this.config.user.password_reset_token_expiration) {
+            this.config.user.password_reset_token_expiration = 'pasword_reset_token_expires';
+        }
 
-    if(!this.config.email_address) {
-      this.config.email_address = 'username';
+        if(!this.config.email_address) {
+            this.config.email_address = 'username';
+        }
+
+        if(this.config.security.email_verification) {
+            if(!this.config.user.email_verified) {
+                this.config.user.email_verified = 'email_verified';
+            }
+            if(!this.config.user.email_verification_hash) {
+                this.config.user.email_verification_hash = 'email_verification_hash';
+            }
+
+            if(!this.config.user.email_verification_hash_expires) {
+                this.config.user.email_verification_hash_expires = 'email_verification_hash_expires';
+            }
+        }
+
+        if(this.config.security.max_failed_login_attempts) {
+            if(!this.config.user.account_locked) {
+                this.config.account_locked = 'account_locked';
+            }
+
+            if(!this.config.user.account_locked_until) {
+                this.config.user.account_locked_until = 'account_locked_until';
+            }
+
+            if(!this.config.user.account_failed_attempts) {
+                this.config.user.account_failed_attempts = 'account_failed_attempts';
+            }
+
+        }
     }
-
-    if(this.config.security.email_verification) {
-      if(!this.config.user.email_verified) {
-        this.config.user.email_verified = 'email_verified';
-      }
-      if(!this.config.user.email_verification_hash) {
-        this.config.user.email_verification_hash = 'email_verification_hash';
-      }
-
-      if(!this.config.user.email_verification_hash_expires) {
-        this.config.user.email_verification_hash_expires = 'email_verification_hash_expires';
-      }
-    }
-
-    if(this.config.security.max_failed_login_attempts) {
-      if(!this.config.user.account_locked) {
-        this.config.account_locked = 'account_locked';
-      }
-
-      if(!this.config.user.account_locked_until) {
-        this.config.user.account_locked_until = 'account_locked_until';
-      }
-
-      if(!this.config.user.account_failed_attempts) {
-        this.config.user.account_failed_attempts = 'account_failed_attempts';
-      }
-
-    }
-  }
 };
 
 /**
@@ -369,52 +369,52 @@ Authr.prototype.user = function () {
  * @private
  */
 Authr.prototype.security = function () {
-  if(!this.config.security) {
-    this.config.security = {
-      hash_password: true,
-      hash_salt_factor: 10,
-      password_reset_token_expiration_hours: 1,
-      max_failed_login_attempts: 10,
-      reset_attempts_after_minutes: 5,
-      lock_account_for_minutes: 30,
-      email_verification: true,
-      email_verification_expiration_hours: 12
-    };
-  } else {
-    if(!this.config.security.hash_password) {
-      this.config.security.hash_password = true;
-    }
-    if(!this.config.security.password_reset_token_expiration_hours) {
-      this.config.security.password_reset_token_expiration_hours = 1;
-    }
-    if(!this.config.security.hash_salt_factor && this.config.security.hash_password === true) {
-      this.config.security.hash_salt_factor = 10;
-    }
+    if(!this.config.security) {
+        this.config.security = {
+            hash_password: true,
+            hash_salt_factor: 10,
+            password_reset_token_expiration_hours: 1,
+            max_failed_login_attempts: 10,
+            reset_attempts_after_minutes: 5,
+            lock_account_for_minutes: 30,
+            email_verification: true,
+            email_verification_expiration_hours: 12
+        };
+    } else {
+        if(!this.config.security.hash_password) {
+            this.config.security.hash_password = true;
+        }
+        if(!this.config.security.password_reset_token_expiration_hours) {
+            this.config.security.password_reset_token_expiration_hours = 1;
+        }
+        if(!this.config.security.hash_salt_factor && this.config.security.hash_password === true) {
+            this.config.security.hash_salt_factor = 10;
+        }
 
-    if(!this.config.security.email_reset_token_expiration_hours) {
-      this.config.security.email_reset_token_expiration_hours = 1;
-    }
+        if(!this.config.security.email_reset_token_expiration_hours) {
+            this.config.security.email_reset_token_expiration_hours = 1;
+        }
 
-    if(this.config.security.max_failed_login_attempts === null) {
-      this.config.security.max_failed_login_attempts = 10;
-    }
+        if(this.config.security.max_failed_login_attempts === null) {
+            this.config.security.max_failed_login_attempts = 10;
+        }
 
-    if(this.config.security.max_failed_login_attempts && !this.config.security.reset_attempts_after_minutes) {
-      this.config.security.reset_attempts_after_minutes = 5;
-    }
+        if(this.config.security.max_failed_login_attempts && !this.config.security.reset_attempts_after_minutes) {
+            this.config.security.reset_attempts_after_minutes = 5;
+        }
 
-    if(this.config.security.max_failed_login_attempts && !this.config.security.lock_account_for_minutes) {
-      this.config.security.lock_account_for_minutes = 30;
-    }
+        if(this.config.security.max_failed_login_attempts && !this.config.security.lock_account_for_minutes) {
+            this.config.security.lock_account_for_minutes = 30;
+        }
 
-    if(this.config.security.email_verification === null) {
-      this.config.security.email_verification = true;
-    }
+        if(this.config.security.email_verification === null) {
+            this.config.security.email_verification = true;
+        }
 
-    if(this.config.security.email_verification && !this.config.security.email_verification_expiration_hours) {
-      this.config.security.email_verification_expiration_hours = 12;
+        if(this.config.security.email_verification && !this.config.security.email_verification_expiration_hours) {
+            this.config.security.email_verification_expiration_hours = 12;
+        }
     }
-  }
 
 };
 
@@ -423,20 +423,30 @@ Authr.prototype.security = function () {
  * @private
  */
 Authr.prototype.getAdapter = function () {
-  var self = this;
-  var Adapter;
-  switch(this.config.db.type) {
-  case 'mongodb':
-    Adapter = require('authr-mongo');
-    break;
-  default:
-    Adapter = require('authr-nedb');
-    break;
-  }
-self.config.Adapter = new Adapter(self.config);
-self.config.Adapter.connect(function(err){
-});
+    var self = this;
+    var Adapter;
+    switch(this.config.db.type) {
+    case 'mongodb':
+        Adapter = require('authr-mongo');
+        break;
+    case 'sqlite':
+        Adapter = require('authr-sql');
+        break;
+    case 'mysql':
+        Adapter = require('authr-sql');
+        break;
+    case 'mariadb':
+        Adapter = require('authr-sql');
+        break;
+    case 'postgresql':
+        Adapter = require('authr-sql');
+        break;
+    default:
+        Adapter = require('authr-nedb');
+        break;
+    }
+    self.config.Adapter = new Adapter(self.config);
+    self.config.Adapter.connect(function (err) {});
 };
-
 
 module.exports = Authr;
