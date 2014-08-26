@@ -7,7 +7,9 @@ authr is an app signup/authentication module inspired by [Lockit](https://github
 
 It is designed to be framework-independent (i.e., doesn't require Express) and to give you greater control over your user schema and the login process.
 
-In addition to allowing you to specify the names of fields to match your database schema, it also allows you to pass custom fields to the signup method if you collect additional information from users when they sign up.In
+In addition to allowing you to specify the names of fields to match your database schema, it also allows you to pass custom fields to the signup method if you collect additional information from users when they sign up.
+
+Check [this repo](https://github.com/jtowers/authr-express-example) for an example express app with code examples.
 
 This module is in active development.
 
