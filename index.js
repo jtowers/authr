@@ -373,6 +373,8 @@ Authr.prototype.security = function () {
         this.config.security = {
             hash_password: true,
             hash_salt_factor: 10,
+            min_password_length: 6,
+            max_password_length:70,
             password_reset_token_expiration_hours: 1,
             max_failed_login_attempts: 10,
             reset_attempts_after_minutes: 5,
@@ -381,6 +383,12 @@ Authr.prototype.security = function () {
             email_verification_expiration_hours: 12
         };
     } else {
+        if(!this.config.security.min_password_length){
+            this.config.security.min_password_length = 6;
+        }
+        if(!this.config.security.max_password_length){
+            this.config.security.max_password_length = 70;
+        }
         if(!this.config.security.hash_password) {
             this.config.security.hash_password = true;
         }
