@@ -45,7 +45,15 @@ describe('validation module', function () {
     };
 
     authr = new Authr(config);
-    done();
+      var signup = {
+          username: 'test@test.com',
+          password:'test',
+          org: 'taken'
+      };
+      authr.signUp(signup, function(err, user){
+          if(err) throw err;
+          done();
+      });
   });
   afterEach(function (done) {
     authr.config.Adapter.resetCollection(function (err) {
@@ -54,7 +62,7 @@ describe('validation module', function () {
     });
   });
 
-it('should validate', function(done){
+it('should validate when everything is correct', function(done){
     var signup = {
         username:'test',
         password: 'test',
@@ -62,6 +70,18 @@ it('should validate', function(done){
     };
     authr.validate(signup, function(err, _signup){
         should.not.exist(err);
+        done();
+    });
+});
+    
+    it('should not validate when there are errors', function(done){
+    var signup = {
+        username:'test',
+        password: 'test',
+        org: 'taken'
+    };
+    authr.validate(signup, function(err, _signup){
+        should.exist(err);
         done();
     });
 });

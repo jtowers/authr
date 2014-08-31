@@ -1,6 +1,6 @@
 {
   "name": "authr",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Simple, flexible authorization and signup for apps.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,8 @@
     "async": "~0.9.0",
     "authr-nedb": "1.X.X",
     "moment": "~2.8.1",
-    "validate.js": "~0.2.0"
+    "validate.js": "~0.2.0",
+    "es6-promise": "~1.0.0"
   },
   "devDependencies": {
     "mocha": "*",

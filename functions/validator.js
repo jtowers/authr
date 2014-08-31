@@ -27,18 +27,38 @@ JSON.flatten = function (data) {
     return result;
 };
 
+JSON.unflatten = function(data) {
+    "use strict";
+    if (Object(data) !== data || Array.isArray(data))
+        return data;
+    var result = {}, cur, prop, idx, last, temp;
+    for(var p in data) {
+        cur = result, prop = "", last = 0;
+        do {
+            idx = p.indexOf(".", last);
+            temp = p.substring(last, idx !== -1 ? idx : undefined);
+            cur = cur[prop] || (cur[prop] = (!isNaN(parseInt(temp)) ? [] : {}));
+            prop = temp;
+            last = idx + 1;
+        } while(idx >= 0);
+        cur[prop] = data[p];
+    }
+    return result[""];
+}
+
 validate.validators.unique = function (val, options, key, attributes) {
-    var obj = {
-        'searchfor': val
-    };
-    options.Adapter.isValueTaken(obj, val, function (err, isTaken) {
+    return validate.Promise(function(resolve, reject) {
+    var obj = {};
+    obj[key] = val;
+    obj = JSON.unflatten(obj);
+    options.Adapter.isValueTaken(obj, key, function (err, isTaken) {
         if(isTaken) {
-            return 'this value is taken';
+            reject(new Error('this value is taken'));
         } else {
-            return null;
+            resolve();
         }
     });
-
+    });
 };
 
 /**
@@ -70,7 +90,12 @@ var Validate = function (config, signup, callback) {
                 }
             }
         }
-        return(callback(validate(signup_flat, constraints), signup));
+        var validation = validate.async(signup_flat, constraints).then(function(){
+            callback(null, signup);
+        },function(err){
+            callback(err, signup);
+        });
+
     } else {
         return callback(new Error('Custom field definitions are required for validation'));
     }
