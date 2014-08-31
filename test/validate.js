@@ -2,7 +2,7 @@ var should = require('chai').should();
 var blanket = require('blanket');
 var Authr = require('../index.js');
 
-describe.only('validation module', function () {
+describe('validation module', function () {
   var authr;
   beforeEach(function (done) {
     config = {

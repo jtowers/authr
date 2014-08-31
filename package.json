@@ -34,8 +34,6 @@
     "chai": "*",
     "jsdoc": "~3.3.0-alpha9",
     "ink-docstrap": "~0.4.12",
-    "gulp-mocha": "~1.0.0",
-    "gulp": "~3.8.7",
     "blanket": "~1.1.6"
   },
   "config": {
