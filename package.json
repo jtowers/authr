@@ -26,7 +26,8 @@
   "dependencies": {
     "async": "~0.9.0",
     "authr-nedb": "1.X.X",
-    "moment": "~2.8.1"
+    "moment": "~2.8.1",
+    "validate.js": "~0.2.0"
   },
   "devDependencies": {
     "mocha": "*",
@@ -37,10 +38,16 @@
     "gulp": "~3.8.7",
     "blanket": "~1.1.6"
   },
-    "config": {
-      "blanket": {
-        "pattern": ["/index.js", "functions/"],
-        "data-cover-never": ["node_modules", "test"]
-      }
+  "config": {
+    "blanket": {
+      "pattern": [
+        "/index.js",
+        "functions/"
+      ],
+      "data-cover-never": [
+        "node_modules",
+        "test"
+      ]
     }
+  }
 }
