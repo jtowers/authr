@@ -258,6 +258,65 @@ var config = {
 };
 ```
 
+## Signup Validation
+
+As of v0.4.0, you can use authr to validate custom fields before calling the signup method for a non-SQL database.
+
+**Note: The SQL adapter uses Sequelize, which has it's own validation. See the authr-sql [documentation](https://github.com/jtowers/authr-sql) to learn more about that.**
+
+If you are using one of the other adapters, you can set the `custom` key in your authr configuration to validate fields collected during signup that aren't username, password, and email address.
+
+```
+var config = {
+    custom: {
+        // Require the 'organization_name' field to exist
+        organization_name: {presence:true},
+    }
+}
+```
+
+The validator uses [validate.js](http://validatejs.org) for validation. You can any of their [valdiators](http://validatejs.org/#validators) with authr.
+
+In addition to the default validate.js validators, authr uses a custom `unique` validator that will check to make sure that the field specified doesn't already contain the supplied value.
+
+If your schema is flat, you can simply use the name of the field as they key and authr will look for that in your signup object.
+
+If your schema uses nesting, you can specify the path to a field using the `path` key:
+```
+var config = {
+    custom: {
+        organization_name: {presence:true, path: 'organization.organization_name'},
+    }
+}
+```
+
+If you specify a path, authr will look for the field in that location in the signup option that you pass to it for validation.
+
+A validation will look something like this:
+```
+var Authr = require('authr');
+var config = {
+    custom: {
+        // Require the 'organization_name' field to exist
+        organization_name: {presence:true, unique:true},
+    }
+}
+var authr = new Authr(config);
+
+var signup = {
+   username: 'test@test.com',
+   password: 'super_secret',
+   organization: 'massive dynamic'
+}
+
+authr.validate(signup, function(err, _signup){
+    console.log(err) // err will be any errors returned by the validator
+    console.log(_signup) // will be the signup object you passed in
+});
+```
+
+After validation, you can return an error to the user or call `authr.signUp()` to complete the signup.
+
 ## Verifying an Email Address
 Call `authr.verifyEmail()` and pass it a signup token to verify a user's email address.
 
@@ -356,5 +415,4 @@ This method accepts a callback and will return the user that was removed so that
 
 1. Add support for couchdb
 2. Add support for rethinkdb
-3. Add support for validation of default and custom fields
 
