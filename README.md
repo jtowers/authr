@@ -23,20 +23,15 @@ The core module has the following features:
 
 Additional adapters allow you to persist data to different database types. Currently supported types are:
 
-* [n-Memory NeDB (default, for testing)
+* in-Memory NeDB (default, for testing)
 * [MongoDB](https://github.com/jtowers/authr-mongo)
 * [SQL (using Sequelize)](https://github.com/jtowers/authr-sql)
 
 
-I have plans to add support for:
-
-* couchdb
-* rethinkdb
-
 ## Table of Contents
 - [Basic Usage](#basic-usage)
 - [Configuration](#configuration)
-  -[User](#user-configuration)
+  - [User](#user-configuration)
   - [Security](#security-configuration)
   - [Database](#database-configuration)
   - [Error Messages](#error-message-configuration)
@@ -410,9 +405,3 @@ authr.updatePassword(token, new_password, function(err, user){
 Call `authr.deleteAccount()` and pass it a username and password to delete a user account. A password is required to ensure that the account removal is authorized.
 
 This method accepts a callback and will return the user that was removed so that you can perform any cleanup.
-
-## Todo
-
-1. Add support for couchdb
-2. Add support for rethinkdb
-
